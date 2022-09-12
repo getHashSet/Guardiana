@@ -1,5 +1,4 @@
 import { ThemeProvider } from 'styled-components';
-import { useSelector } from 'react-redux';
 import './reset.css';
 
 // ============= //
@@ -26,6 +25,8 @@ export default function Theme({ children }) {
         light: "#dfe6e9",
         blue: "#3498db",
         darkBlue: "#2980b9",
+        brown: "#ccae62",
+        darkBrown: "#5e463d",
         green: "#2ecc71",
         darkGreen: "#27ae60",
         red: "#e74c3c",
