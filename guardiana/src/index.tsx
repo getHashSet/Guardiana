@@ -23,17 +23,13 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Theme>
-        <Reset>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
-        </Reset>
-      </Theme>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <Theme>
+      <Reset>
+        <App />
+      </Reset>
+    </Theme>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

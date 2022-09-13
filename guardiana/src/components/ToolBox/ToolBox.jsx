@@ -3,17 +3,15 @@ import styled from 'styled-components';
 export default function ToolBox() {
   return (
     <StyledWrapper>
-      <StyledButtonRound>volume slider</StyledButtonRound>
-      <StyledButtonRound>mute</StyledButtonRound>
-      <StyledButtonRound>Menu Gears</StyledButtonRound>
+      <StyledButtonRound>menu</StyledButtonRound>
     </StyledWrapper>
   );
 };
 
 const StyledWrapper = styled('div')`
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 0;
+  right: 0;
 `;
 
 const StyledButtonRound = styled('button')`
