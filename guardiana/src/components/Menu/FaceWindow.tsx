@@ -77,7 +77,7 @@ export default function FaceWindow() {
     let lastUpdate: number = Date.now();
     let animationTimeout: number = 0;
     let componentMounted: boolean = true;
-    let isTalking: boolean = false;
+    let isTalking: boolean = true;
 
     function getRandomArbitrary(min: number, max: number) {
         return Math.random() * (max - min) + min;

@@ -1,14 +1,38 @@
 import styled from 'styled-components';
-import background from '../../assets/maps/battleMaps/battle01/map.png';
+import * as I from '../../utils/types';
+import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import spriteSheet_max from '../../assets/characters/Max/normal/max-sprite.png';
 import spriteSheet_goblin from '../../assets/enemies/Goblin/goblin-sprite.png';
 
 class Background {
     private size: { width: number, height: number };
+    private pixels: { width: number, height: number };
     private position: { x: number, y: number };
     private scale: number;
     private sprite: any;
+
+    constructor(map: I.Map) {
+        this.size = {
+            width: map.width,
+            height: map.height
+        }
+
+        this.position = {
+            x: map.startingLocationX,
+            y: map.startingLocationY
+        }
+
+        this.pixels = {
+            width: map.pixelsWidth,
+            height: map.pixelsHeight
+        }
+
+        this.sprite = new Image();
+        this.sprite.src = map.image;
+
+        this.scale = 2.5; // TODO GET THIS FROM SETTINGS
+    }
 
     move(direction: Direction) {
         switch (direction) {
@@ -29,23 +53,6 @@ class Background {
         }
     }
 
-    constructor() {
-        this.size = {
-            width: 640,
-            height: 420
-        }
-
-        this.position = {
-            x: -320,
-            y: -320
-        }
-
-        this.sprite = new Image();
-        this.sprite.src = background;
-
-        this.scale = 2.5; // TODO GET THIS FROM SETTINGS
-    }
-
     draw() {
         const canvas: any = document.getElementById('layer-0');
         canvas.setAttribute('width', this.size.width);
@@ -53,12 +60,18 @@ class Background {
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(
-            this.sprite, // Image
-            this.position.x,  // X location
-            this.position.y,  // Y location
+            this.sprite,
+            0,
+            0,
             this.size.height * this.scale,
-            this.size.width * this.scale
+            this.size.width * this.scale,
+            this.position.x,
+            this.position.y,
+            this.pixels.width,
+            this.pixels.height
         );
+        //ctx.drawImage(this.sprite, this.spriteGrid.x, this.spriteGrid.y, this.size.width, this.size.height, this.position.x, this.position.y, 32 * 2.5, 32 * 2.5);
+
 
     }
 }
@@ -175,8 +188,11 @@ class Character {
 
 export default function Tv() {
 
+
+    const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
+
     const player = new Character();
-    const background = new Background();
+    const background = new Background(map);
 
     const Update = () => {
         let ctx: any = document.getElementById('layer-0')
