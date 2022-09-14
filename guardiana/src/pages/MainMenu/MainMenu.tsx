@@ -1,13 +1,11 @@
 import { Page } from '../../styles';
-import Tv from '../../components/Tv/Tv';
 
 function MainMenu() {
   return (
     <Page>
-      <Tv />
       <div>
-        <h1>main menu</h1>
-        <button>Start</button>
+        <h1>Shining Force</h1>
+        <button>Press Any Key</button>
       </div>
     </Page>
   );

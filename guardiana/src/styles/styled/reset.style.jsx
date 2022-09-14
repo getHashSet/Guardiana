@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 
 export const Reset = styled.main`
-    position: relative;
     font-family: ${props => props.theme.font.body};
-    max-width: 100vw;
     color: ${props => props.theme.color.font};
-    background-color: ${props => props.darkMode ? props.theme.color.font : props.theme.color.background};
     overflow-x: hidden;
     * {
         &::selection {

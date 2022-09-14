@@ -245,12 +245,11 @@ export default function Tv() {
 const StyledTv = styled('canvas')`
     width: 90vw;
     max-width: 1080px;
-    height: fit-content;
-    margin-top: 2em;
+    height: auto;
     overflow: hidden;
     background: black;
     border: 5px solid #0a0a0a;
-    background-color: transparent;
+    background-color: black;
     border-radius: 2em;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
