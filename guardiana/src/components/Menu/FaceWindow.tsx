@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import face from '../../assets/characters/Max/normal/max-face.png'
+import face from '../../assets/characters/Max/base/max-face.png'
 
 class Face {
     public position: { x: number, y: number };
-    private velocity: any;
     private size: any;
     private sprite: any;
     private spriteGrid: any;

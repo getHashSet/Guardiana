@@ -68,11 +68,10 @@ export interface Item {
 }
 
 export interface Map {
-    image: string;
-    width: number;
-    height: number;
-    startingLocationX: number;
-    startingLocationY: number;
-    pixelsWidth: number;
-    pixelsHeight: number;
+    imageBottom: string;
+    imageTop: string;
+    blocked: string[];
+    grid: [number, number];
+    startingLocation: [number, number];
+    pixelOffset: {x: number, y: number};
 }
