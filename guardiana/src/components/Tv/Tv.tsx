@@ -260,6 +260,7 @@ export default function Tv() {
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
     const Background = new Map(map);
     const Player = new Character(Background.heroStartLocations[0]);
+    const scale = 3;
 
     const Update = () => {
         if (!mounted) { return };
@@ -290,7 +291,7 @@ export default function Tv() {
                     };
 
                     // check if camera update is needed
-                    if (Player.currentLocation.y <= 72) {
+                    if (Player.positionOnTV.y <= I.PIXEL.BLOCK * 2 * scale) {
                         Background.move(Direction.UP);
                         Player.currentLocation.y--;
                         Player.Update();
@@ -312,7 +313,8 @@ export default function Tv() {
                     };
 
                     // camera update
-                    if (Player.positionOnTV.y >= 300) {
+                    console.log(Player.positionOnTV.y);
+                    if (Player.positionOnTV.y >= I.PIXEL.BLOCK * 4 * scale) {
                         // move camera with player.
                         Background.move(Direction.DOWN);
                         Player.currentLocation.y++;
@@ -336,7 +338,7 @@ export default function Tv() {
                     };
 
                     // check if we need to move the camera
-                    if (Player.positionOnTV.x <= 72) {
+                    if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 3 * scale) {
                         Background.move(Direction.RIGHT);
                         Player.currentLocation.x--;
                         Player.Update();
@@ -357,7 +359,7 @@ export default function Tv() {
                         return;
                     };
 
-                    if (Player.positionOnTV.x >= 432) {
+                    if (Player.positionOnTV.x >= I.PIXEL.BLOCK * 5 * scale) {
                         Background.move(Direction.LEFT);
                         Player.currentLocation.x++;
                         Player.Update();
