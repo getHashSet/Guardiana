@@ -13,7 +13,7 @@ import battle01 from '../../assets/maps/battleMaps/battle01/';
 export default function Tv() {
     let mounted: boolean = true;
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
-    const Background = new Map(battle01);
+    const Background = new Map(map);
     const Player = new Character(Background.heroStartLocations[0], Background.cameraLocation, spriteSheet_max);
 
     const Update = () => {
@@ -29,6 +29,8 @@ export default function Tv() {
     // === MOVEMENT === //
     // ================ //
     window.addEventListener('keydown', ({ keyCode }) => {
+
+        console.log(keyCode)
 
         switch (keyCode) {
             case 87: //W //UP
@@ -122,23 +124,27 @@ export default function Tv() {
                     console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
                     break;
                 }
+            case 67:
+                {
+                    Background.cameraToTarget({x: Player.currentLocationOnGrid.x, y: Player.currentLocationOnGrid.y})
+                }
+                break;
             default:
                 break;
         }
     });
 
     useEffect(() => {
-
+        mounted = true;
         const canvas: any = document.getElementById('tv');
         canvas.setAttribute('width', 576);
         canvas.setAttribute('height', 480);
         console.log('TV mounted');
         Update();
 
-
         return () => {
             mounted = false;
-            console.log('TV Unmounted')
+            console.log('TV Unmounted');
         }
 
     }, [Update]);

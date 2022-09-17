@@ -86,8 +86,8 @@ export class Map {
             this.pixels.height,         // stretch image to canvas
             this.cameraPosition.x,      // Moves the image but not the grid: ;
             this.cameraPosition.y,      // Moves the image but not the grid: ;
-            this.pixels.width * I.SCALE,//
-            this.pixels.height * I.SCALE//
+            this.pixels.width * I.SCALE,// idk
+            this.pixels.height * I.SCALE// idk
         );
     }
 
@@ -110,7 +110,10 @@ export class Map {
     }
 
     cameraToTarget(targetLocation: { x: number, y: number }) {
-        this.cameraPosition = targetLocation;
+        // This should release the target and witch to grid target.
+        // Then grid target will move back to the x,y location of target.
+        // Once there the target gains focus
+        console.log('MOVE TO TARGET WORKED... SORTA')
     }
 
 }

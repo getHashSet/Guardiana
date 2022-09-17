@@ -25,9 +25,7 @@ export class Character {
         this.positionOnTV = {
             x: (spawnLocation.x - cameraPosition.x) * I.PIXEL.BLOCK * I.SCALE,
             y: (spawnLocation.y - cameraPosition.y) * I.PIXEL.BLOCK * I.SCALE
-            //x: spawnLocation.x * I.PIXEL.BLOCK * I.SCALE,
-            //y: spawnLocation.y * I.PIXEL.BLOCK * I.SCALE
-        } // your location on the 576x480 canvus 
+        }
 
         this.currentLocationOnGrid = {
             x: spawnLocation.x,

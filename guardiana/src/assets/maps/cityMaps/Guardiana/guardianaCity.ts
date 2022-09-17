@@ -62,8 +62,8 @@ export const guardianaCity: I.Map = {
     heroStartLocations: [
         {
             name: 'player',
-            x: 4,
-            y: 3
+            x: 34,
+            y: 39
         },
     ],
 
