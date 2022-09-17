@@ -12,9 +12,9 @@ import battle01 from '../../assets/maps/battleMaps/battle01/';
 // ================= //
 export default function Tv() {
     let mounted: boolean = true;
-    //const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
+    const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
     const Background = new Map(battle01);
-    const Player = new Character(Background.heroStartLocations[0], spriteSheet_max);
+    const Player = new Character(Background.heroStartLocations[0], Background.cameraLocation, spriteSheet_max);
 
     const Update = () => {
         if (!mounted) { return };
@@ -25,6 +25,9 @@ export default function Tv() {
         requestAnimationFrame(Update);
     };
 
+    // ================ //
+    // === MOVEMENT === //
+    // ================ //
     window.addEventListener('keydown', ({ keyCode }) => {
 
         switch (keyCode) {
@@ -34,7 +37,7 @@ export default function Tv() {
 
                     // check for blocks
 
-                    const nextSquare: number = Background.grid[Player.currentLocation.y - 1][Player.currentLocation.x];
+                    const nextSquare: number = Background.grid[Player.currentLocationOnGrid.y - 1][Player.currentLocationOnGrid.x];
                     if (nextSquare <= 7) {
                         console.log(`boop`);
                         return;
@@ -43,45 +46,44 @@ export default function Tv() {
                     // check if camera update is needed
                     if (Player.positionOnTV.y <= I.PIXEL.BLOCK * 2 * I.SCALE) {
                         Background.move(I.DIRECTION.UP);
-                        Player.currentLocation.y--;
+                        Player.currentLocationOnGrid.y--;
                         Player.Update();
                     } else {
                         Player.move(I.DIRECTION.UP);
                     };
 
-                    console.table(`Current Block: ${Player.currentLocation.x}${[Player.currentLocation.y]}`);
+                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
                     break;
                 }
             case 83: //S
                 {
                     Player.face(I.DIRECTION.DOWN);
 
-                    const nextSquare: number = Background.grid[Player.currentLocation.y + 1][Player.currentLocation.x];
+                    const nextSquare: number = Background.grid[Player.currentLocationOnGrid.y + 1][Player.currentLocationOnGrid.x];
                     if (nextSquare <= 7) {
                         console.log(`boop`);
                         return;
                     };
 
                     // camera update
-                    console.log(Player.positionOnTV.y);
                     if (Player.positionOnTV.y >= I.PIXEL.BLOCK * 4 * I.SCALE) {
                         // move camera with player.
                         Background.move(I.DIRECTION.DOWN);
-                        Player.currentLocation.y++;
+                        Player.currentLocationOnGrid.y++;
                         Player.Update();
                     }
                     else {
                         Player.move(I.DIRECTION.DOWN);
                     };
 
-                    console.table(`Current Block: ${Player.currentLocation.x}${[Player.currentLocation.y]}`);
+                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
                     break;
                 }
             case 65: //A
                 {
                     Player.face(I.DIRECTION.LEFT);
 
-                    const nextSquare: number = Background.grid[Player.currentLocation.y][Player.currentLocation.x - 1];
+                    const nextSquare: number = Background.grid[Player.currentLocationOnGrid.y][Player.currentLocationOnGrid.x - 1];
                     if (nextSquare <= 7) {
                         console.log(`boop`);
                         return;
@@ -90,20 +92,20 @@ export default function Tv() {
                     // check if we need to move the camera
                     if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 3 * I.SCALE) {
                         Background.move(I.DIRECTION.RIGHT);
-                        Player.currentLocation.x--;
+                        Player.currentLocationOnGrid.x--;
                         Player.Update();
                     } else {
                         Player.move(I.DIRECTION.LEFT);
                     }
 
-                    console.table(`Current Block: ${Player.currentLocation.x}${[Player.currentLocation.y]}`);
+                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
                     break;
                 }
             case 68: //D
                 {
                     Player.face(I.DIRECTION.RIGHT);
 
-                    const nextSquare: number = Background.grid[Player.currentLocation.y][Player.currentLocation.x + 1];
+                    const nextSquare: number = Background.grid[Player.currentLocationOnGrid.y][Player.currentLocationOnGrid.x + 1];
                     if (nextSquare <= 7) {
                         console.log(`boop`);
                         return;
@@ -111,13 +113,13 @@ export default function Tv() {
 
                     if (Player.positionOnTV.x >= I.PIXEL.BLOCK * 5 * I.SCALE) {
                         Background.move(I.DIRECTION.LEFT);
-                        Player.currentLocation.x++;
+                        Player.currentLocationOnGrid.x++;
                         Player.Update();
                     } else {
                         Player.move(I.DIRECTION.RIGHT);
                     }
 
-                    console.table(`Current Block: ${Player.currentLocation.x}${[Player.currentLocation.y]}`);
+                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
                     break;
                 }
             default:
@@ -127,7 +129,7 @@ export default function Tv() {
 
     useEffect(() => {
 
-        const canvas: any = document.getElementById('layer-0');
+        const canvas: any = document.getElementById('tv');
         canvas.setAttribute('width', 576);
         canvas.setAttribute('height', 480);
         console.log('TV mounted');
@@ -142,9 +144,7 @@ export default function Tv() {
     }, [Update]);
 
     return (
-        <>
-            <StyledTv id="layer-0" />
-        </>
+        <StyledTv id="tv" />
     );
 };
 

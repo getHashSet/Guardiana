@@ -7,27 +7,34 @@ export class Character {
     private spriteGrid: any;
     private lastUpdate: any;
     private animate: { isAnimated: boolean, animationFlag: boolean };
-    public currentLocation: { x: number, y: number };
-    public currentSquareID: string;
+    public currentLocationOnGrid: { x: number, y: number };
+    private startingBlock: {x: number, y: number};
 
-    constructor(spawnLocation: { name: string, x: number, y: number }, spriteSheet: any, animate: boolean = true) {
+    constructor(spawnLocation: { name: string, x: number, y: number }, cameraPosition: {x: number, y: number}, spriteSheet: any, animate: boolean = true) {
 
         this.animate = {
             isAnimated: animate,
             animationFlag: false
         }
 
+        this.startingBlock = {
+            x: 4,
+            y: 3
+        }
+
         this.positionOnTV = {
-            x: spawnLocation.x * I.PIXEL.BLOCK * I.SCALE,
-            y: spawnLocation.y * I.PIXEL.BLOCK * I.SCALE
+            x: (spawnLocation.x - cameraPosition.x) * I.PIXEL.BLOCK * I.SCALE,
+            y: (spawnLocation.y - cameraPosition.y) * I.PIXEL.BLOCK * I.SCALE
+            //x: spawnLocation.x * I.PIXEL.BLOCK * I.SCALE,
+            //y: spawnLocation.y * I.PIXEL.BLOCK * I.SCALE
         } // your location on the 576x480 canvus 
 
-        this.currentLocation = {
+        this.currentLocationOnGrid = {
             x: spawnLocation.x,
             y: spawnLocation.y
         }; // You place on the map.
 
-        this.currentSquareID = `${this.currentLocation.x}${this.currentLocation.y}`;
+        console.table(this.currentLocationOnGrid);
 
         this.size = {
             width: I.PIXEL.BLOCK,
@@ -72,27 +79,23 @@ export class Character {
         }
     }
 
-    updateSquareID() {
-        this.currentSquareID = `${this.currentLocation.x}${this.currentLocation.y}`;
-    }
-
     move(direction: I.DIRECTION) {
         try {
             switch (direction) {
                 case I.DIRECTION.DOWN:
-                    this.currentLocation.y++;
+                    this.currentLocationOnGrid.y++;
                     this.positionOnTV.y += I.PIXEL.BLOCK * I.SCALE;
                     break;
                 case I.DIRECTION.UP:
-                    this.currentLocation.y--;
+                    this.currentLocationOnGrid.y--;
                     this.positionOnTV.y -= I.PIXEL.BLOCK * I.SCALE;
                     break;
                 case I.DIRECTION.LEFT:
-                    this.currentLocation.x--;
+                    this.currentLocationOnGrid.x--;
                     this.positionOnTV.x -= I.PIXEL.BLOCK * I.SCALE;
                     break;
                 case I.DIRECTION.RIGHT:
-                    this.currentLocation.x++;
+                    this.currentLocationOnGrid.x++;
                     this.positionOnTV.x += I.PIXEL.BLOCK * I.SCALE;
                     break;
                 default:
@@ -129,7 +132,7 @@ export class Character {
             y: I.PIXEL.BLOCK * I.SCALE
         }
 
-        let ctx: any = document.getElementById('layer-0');
+        let ctx: any = document.getElementById('tv');
         ctx = ctx.getContext('2d');
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(
@@ -146,6 +149,5 @@ export class Character {
 
     Update() {
         this.draw();
-        this.updateSquareID();
     }
 }

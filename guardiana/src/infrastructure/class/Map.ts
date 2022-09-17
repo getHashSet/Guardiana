@@ -2,10 +2,11 @@ import * as I from '../../utils/types';
 
 export class Map {
     private pixels: { width: number, height: number }; // total pixels width and height
-    private bottomImage: any; //
+    private bottomImage: any;
     private topImage: any;
-    private cameraPosition: { x: number, y: number };
     private pixelOffset: { x: number, y: number };
+    private cameraPosition: { x: number, y: number };
+    public cameraLocation: { x: number, y: number };
     public grid: number[][];
     public heroStartLocations: { name: string, x: number, y: number }[];
     public enemyStartLocations: { name: string, x: number, y: number }[] | null[];
@@ -18,7 +19,7 @@ export class Map {
         this.topImage = new Image()
         this.bottomImage.src = map.imageBottom
         this.topImage.src = map.imageTop
-        
+
         this.heroStartLocations = map.heroStartLocations
         this.enemyStartLocations = map.enemyStartLocations
         this.npcStartLocations = map.enemyStartLocations
@@ -29,7 +30,12 @@ export class Map {
 
         this.grid = map.grid
 
-        this.cameraPosition = map.cameraStartLocation
+        this.cameraLocation = map.cameraStartLocation;
+
+        this.cameraPosition = {
+            x: map.cameraStartLocation.x * I.PIXEL.BLOCK * I.SCALE * -1,
+            y: map.cameraStartLocation.y * I.PIXEL.BLOCK * I.SCALE * -1
+        }
 
         this.pixels = {
             width: map.mapDimentions.x * I.PIXEL.BLOCK,
@@ -59,40 +65,40 @@ export class Map {
 
     // Make anything outside the map black.
     Oblivion() {
-        const canvas: any = document.getElementById('layer-0');
+        const canvas: any = document.getElementById('tv');
         const ctx = canvas.getContext('2d');
         ctx.rect(-24, -24, canvas.offsetWidth, canvas.offsetHeight);
         ctx.fill();
     }
 
     drawMapBottom() {
-        const canvas: any = document.getElementById('layer-0');
+        const canvas: any = document.getElementById('tv');
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
 
         this.Oblivion();
 
         ctx.drawImage(
-            this.bottomImage,
-            this.pixelOffset.x, // TODO: Why is the map loading 4 pixels off?
-            this.pixelOffset.y,
-            this.pixels.width,
-            this.pixels.height,
-            this.cameraPosition.x,
-            this.cameraPosition.y,
-            this.pixels.width * I.SCALE,
-            this.pixels.height * I.SCALE
+            this.bottomImage,           // Image that will be painted to the canvas
+            this.pixelOffset.x,         // Moves the image but not the grid: ;
+            this.pixelOffset.y,         // Moves the image but not the grid: ;
+            this.pixels.width,          // stretch image to canvas
+            this.pixels.height,         // stretch image to canvas
+            this.cameraPosition.x,      // Moves the image but not the grid: ;
+            this.cameraPosition.y,      // Moves the image but not the grid: ;
+            this.pixels.width * I.SCALE,//
+            this.pixels.height * I.SCALE//
         );
     }
 
     drawMapTop() {
-        const canvas: any = document.getElementById('layer-0');
+        const canvas: any = document.getElementById('tv');
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
 
         ctx.drawImage(
             this.topImage,
-            this.pixelOffset.x, // TODO: Why is the map loading 4 pixels off?
+            this.pixelOffset.x,
             this.pixelOffset.y,
             this.pixels.width,
             this.pixels.height,
