@@ -10,6 +10,16 @@ export enum PIXEL {
     BLOCK = 24 // the size of each block in the game as pixels
 }
 
+export enum DIRECTION {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+}
+
+// Scale pixel images by this number.
+export const SCALE: number = 3;
+
 
 // ================== //
 // === INTERFACES === //

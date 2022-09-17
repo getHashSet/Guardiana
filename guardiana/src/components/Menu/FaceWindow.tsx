@@ -115,6 +115,7 @@ export default function FaceWindow() {
 
         return () => {
             componentMounted = false;
+            console.log('FaceWindow Unmounted')
         }
     }, [Update]);
 
