@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import face from '../../assets/characters/Max/base/max-face.png'
-import border from '../../assets/utils/bar.png'
+import face from '../../assets/characters/Max/base/max-face.png';
+import frame from './frame.png';
 
 class Face {
     public position: { x: number, y: number };
@@ -136,16 +136,17 @@ const StyledFaceBlock = styled('div')`
     align-items: center;
     top: 2em;
     left: 2em;
-    background-color: ${props => props.theme.palette.black};
     border: 3px solid white;
     overflow: hidden;
     width: 13em;
     height: 17em;
-    border-image-source: url(${border});
-    border-image-slice: 20;
-    border-image-width: 6;
-    border-image-outset: 1;
+    border: 24px solid yellow;
+    border-radius: 1em;
+    background-color: black;
+    border-image-source: url(${frame});
+    border-image-slice: 12 12;
     border-image-repeat: round;
+    border-image-outset: 0;
 
     canvas {
         width: 192px;

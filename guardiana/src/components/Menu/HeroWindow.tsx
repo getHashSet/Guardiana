@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import frame from './frame.png';
 
 export default function HeroWindow() {
 
@@ -47,8 +48,14 @@ const StyledStatBlock = styled('div')`
     position: absolute;
     top: 2em;
     right: 3em;
-    background-color: ${props => props.theme.palette.blue};
     min-width: 15em;
+    border: 24px solid yellow;
+    border-radius: 1em;
+    background-color: darkblue;
+    border-image-source: url(${frame});
+    border-image-slice: 12 12;
+    border-image-repeat: round;
+    border-image-outset: 0;
 `;
 
 const PointBlock = styled('div')`
