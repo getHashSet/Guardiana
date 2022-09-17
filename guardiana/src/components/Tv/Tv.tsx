@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import spriteSheet_max from '../../assets/characters/Max/base/sprite-max.png';
 import { Character } from '../../infrastructure/class/Character';
 import { Map } from '../../infrastructure/class/Map';
-import battle01 from '../../assets/maps/battleMaps/battle01';
+import battle01 from '../../assets/maps/battleMaps/battle01/';
 
 // ================= //
 // === COMPONENT === //

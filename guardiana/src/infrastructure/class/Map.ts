@@ -18,7 +18,7 @@ export class Map {
         this.topImage = new Image()
         this.bottomImage.src = map.imageBottom
         this.topImage.src = map.imageTop
-
+        
         this.heroStartLocations = map.heroStartLocations
         this.enemyStartLocations = map.enemyStartLocations
         this.npcStartLocations = map.enemyStartLocations
@@ -76,8 +76,8 @@ export class Map {
             this.bottomImage,
             this.pixelOffset.x, // TODO: Why is the map loading 4 pixels off?
             this.pixelOffset.y,
-            this.pixels.height,
             this.pixels.width,
+            this.pixels.height,
             this.cameraPosition.x,
             this.cameraPosition.y,
             this.pixels.width * I.SCALE,
@@ -94,8 +94,8 @@ export class Map {
             this.topImage,
             this.pixelOffset.x, // TODO: Why is the map loading 4 pixels off?
             this.pixelOffset.y,
-            this.pixels.height,
             this.pixels.width,
+            this.pixels.height,
             this.cameraPosition.x,
             this.cameraPosition.y,
             this.pixels.width * I.SCALE,
