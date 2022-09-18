@@ -1,10 +1,21 @@
 import styled from 'styled-components';
 
 export const Reset = styled.main`
-    font-family: ${props => props.theme.font.body};
+    
+    @font-face {
+        font-family: 'Shining Force Font';
+        src: url('../font/shining-force-font.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
     color: ${props => props.theme.color.font};
     overflow-x: hidden;
+
     * {
+        font-family: 'Shining Force Font';
+        line-height: 1.5em;
+
         &::selection {
             color: ${props => props.theme.palette.white};
             background-color: ${props => props.theme.color.splash};

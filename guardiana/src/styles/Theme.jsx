@@ -9,8 +9,8 @@ export default function Theme({ children }) {
     // ========= //
     //   FONTS   //
     // ========= //
-    const headerFamily = "Open Sans, sans-serif";
-    const bodyFamily = "Open Sans, sans-serif";
+    const headerFamily = "Shining Force Font, Open Sans, sans-serif";
+    const bodyFamily = "Shining Force Font, Open Sans, sans-serif";
     const splashFamily = "'Press Start 2P', cursive";
 
     // ========== //

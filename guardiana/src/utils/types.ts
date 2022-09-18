@@ -18,7 +18,7 @@ export enum DIRECTION {
 }
 
 // Scale pixel images by this number.
-export const SCALE: number = 3;
+export const SCALE: number = 2;
 
 
 // ================== //

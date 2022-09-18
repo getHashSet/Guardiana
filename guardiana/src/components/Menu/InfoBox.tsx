@@ -11,8 +11,12 @@ export default function InfoBox() {
 
 const InfoBlock = styled(S.Window)`
     position: absolute;
-    right: 3em;
-    bottom: 5em;
+    font-size: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    right: .5em;
+    bottom: 4em;
     min-width: 10em;
-    min-height: 3em;
 `;

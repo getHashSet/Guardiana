@@ -13,58 +13,69 @@ export default function HeroWindow() {
 
     return (
 
-            <StyledStatBlock>
+        <StyledStatBlock>
 
-                <h3>Name</h3>
+            <h3>Name</h3>
 
-                <h3>Lv</h3>
+            <h3>LV <span>7</span></h3>
 
-                <HitPointBlock>
+            <HitPointBlock>
+                <div>
                     <h3>HP</h3>
                     <HitPointBar remainingPoints={maxHitPoints} pointsUsed={damageTaken}>
                         <div />
                         <div />
                     </HitPointBar>
-                    <h3>
-                        {remainingHitPoints} / {maxHitPoints}
-                    </h3>
-                </HitPointBlock>
+                </div>
+                <h3>
+                    {remainingHitPoints} / {maxHitPoints}
+                </h3>
+            </HitPointBlock>
 
-                <MagicPointBlock>
+            <MagicPointBlock>
+                <div>
                     <h3>MP</h3>
                     <MagicPointBar remainingPoints={8} pointsUsed={0}>
                         <div />
                         <div />
                     </MagicPointBar>
-                    <h3>
-                        {remainingMagicPoints} / {maxMagicPoints}
-                    </h3>
-                </MagicPointBlock>
+                </div>
+                <h3>
+                    {remainingMagicPoints} / {maxMagicPoints}
+                </h3>
+            </MagicPointBlock>
 
-            </StyledStatBlock>
+        </StyledStatBlock>
     )
 }
 
 const StyledStatBlock = styled(S.Window)`
     position: absolute;
     top: 2em;
-    right: 3em;
-    min-width: 15em;
+    right: .5em;
+    min-width: 10em;
+    font-size: 2em;
 `;
 
 const PointBlock = styled('div')`
     display: flex;
+    justify-content: space-between;
+
+    div {
+        display: flex;
+    }
 
     h3 {
-        width: 4em;
         min-width: fit-content;
     }
 `;
 
 const PointBar = styled('div') <{ remainingPoints: number, pointsUsed: number }>`
     display: flex;
-    width: 100%;
     height: 1.5em;
+    overflow: hidden;
+    border-radius: 8px;
+    margin: 0 .5em;
 
     div {
         display: block;

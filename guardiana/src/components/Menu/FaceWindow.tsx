@@ -141,6 +141,7 @@ const StyledFaceBlock = styled(S.Window)`
     width: 13em;
     height: 17em;
     background-color: black;
+    padding: 0;
 
     canvas {
         width: 192px;

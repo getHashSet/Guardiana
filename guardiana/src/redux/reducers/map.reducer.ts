@@ -1,5 +1,5 @@
 import { ACTIONS, Map } from "../../utils/types";
-import guardianaCity from "../../assets/maps/cityMaps/Guardiana";
+import guardianaCity from "../../assets/maps/cityMaps/guardiana";
 
 const map_reducer = (state: Map = guardianaCity, action: any) => {
     switch (action.type) {

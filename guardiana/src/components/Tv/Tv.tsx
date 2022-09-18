@@ -44,7 +44,7 @@ export default function Tv() {
                     };
 
                     // check if camera update is needed
-                    if (Player.positionOnTV.y <= I.PIXEL.BLOCK * 2 * I.SCALE) {
+                    if (Player.positionOnTV.y <= 2 * (I.PIXEL.BLOCK * I.SCALE)) {
                         Background.move(I.DIRECTION.UP);
                         Player.currentLocationOnGrid.y--;
                         Player.Update();
@@ -65,8 +65,10 @@ export default function Tv() {
                         return;
                     };
 
+                    const tv: any = document.getElementById('tv');
+                    
                     // camera update
-                    if (Player.positionOnTV.y >= I.PIXEL.BLOCK * 4 * I.SCALE) {
+                    if (Player.positionOnTV.y >= tv.height - (I.PIXEL.BLOCK * I.SCALE * 3)) {
                         // move camera with player.
                         Background.move(I.DIRECTION.DOWN);
                         Player.currentLocationOnGrid.y++;
@@ -90,7 +92,7 @@ export default function Tv() {
                     };
 
                     // check if we need to move the camera
-                    if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 3 * I.SCALE) {
+                    if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 2 * I.SCALE) {
                         Background.move(I.DIRECTION.RIGHT);
                         Player.currentLocationOnGrid.x--;
                         Player.Update();
@@ -111,7 +113,9 @@ export default function Tv() {
                         return;
                     };
 
-                    if (Player.positionOnTV.x >= I.PIXEL.BLOCK * 5 * I.SCALE) {
+                    const tv: any = document.getElementById('tv');
+
+                    if (Player.positionOnTV.x >= tv.width - (I.PIXEL.BLOCK * I.SCALE * 3)) {
                         Background.move(I.DIRECTION.LEFT);
                         Player.currentLocationOnGrid.x++;
                         Player.Update();

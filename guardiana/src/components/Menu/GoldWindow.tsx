@@ -13,11 +13,13 @@ export default function GoldWindow() {
 const StyledGoldBlock = styled(S.Window)`
     position: absolute;
     top: 2em;
-    left: 2em;
-    width: 13em;
-    height: 6em;
+    left: .5em;
+    width: 7em;
+    height: 3em;
     display: flex;
     flex-wrap: wrap;
+    font-size: 2em;
+    text-transform: uppercase;
     
     h3 {
         display: block;

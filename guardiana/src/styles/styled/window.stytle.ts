@@ -9,4 +9,5 @@ export const Window = styled('section')`
     border-image-repeat: round;
     border-image-outset: 0;
     background-color: darkblue;
+    padding: .5em;
 `;
