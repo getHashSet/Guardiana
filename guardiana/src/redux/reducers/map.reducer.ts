@@ -1,7 +1,7 @@
 import { ACTIONS, Map } from "../../utils/types";
-import guardianaCity from "../../assets/maps/cityMaps/guardiana";
+import worldMap from '../../assets/maps/chapter01/worldMap';
 
-const map_reducer = (state: Map = guardianaCity, action: any) => {
+const map_reducer = (state: Map = worldMap, action: any) => {
     switch (action.type) {
         case ACTIONS.SET_MAP:
             return action.payload;

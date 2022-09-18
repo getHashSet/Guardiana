@@ -1,20 +1,47 @@
 import styled from 'styled-components';
 import * as I from '../../utils/types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setMap } from '../../redux/actions';
 import { useEffect } from 'react';
 import spriteSheet_max from '../../assets/characters/Max/base/sprite-max.png';
 import { Character } from '../../infrastructure/class/Character';
 import { Map } from '../../infrastructure/class/Map';
-import battle01 from '../../assets/maps/battleMaps/battle01/';
 
 // ================= //
 // === COMPONENT === //
 // ================= //
 export default function Tv() {
+    const dispatch = useDispatch();
     let mounted: boolean = true;
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
     const Background = new Map(map);
     const Player = new Character(Background.heroStartLocations[0], Background.cameraLocation, spriteSheet_max);
+
+    const updateMap = (nextMap: I.Map) => {
+        setTimeout(() => {
+            dispatch(setMap(nextMap));
+        }, 200);
+    };
+
+    const mapEvents = (eventID: number) => {
+        switch (eventID) {
+            case 41: // update map exit 1
+                {
+                    const nextMap = Background.events.getMap(eventID);
+                    updateMap(nextMap);
+                }
+                break;
+            case 42: // update map exit 2
+                {
+                    const nextMap = Background.events.getMap(eventID);
+                    updateMap(nextMap);
+                }
+                break;
+            default:
+                console.log('bad event in worldMap, Chapter 01');
+                break;
+        }
+    };
 
     const Update = () => {
         if (!mounted) { return };
@@ -52,7 +79,14 @@ export default function Tv() {
                         Player.move(I.DIRECTION.UP);
                     };
 
-                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
+                    const currentSquareEventID: number = Background.grid[Player.currentLocationOnGrid.y][Player.currentLocationOnGrid.x];
+
+                    // check for triggered events
+                    if (currentSquareEventID >= 40) {
+                        mapEvents(currentSquareEventID);
+                    };
+
+                    console.table(`Current Block: [${Player.currentLocationOnGrid.x},${[Player.currentLocationOnGrid.y]}]`);
                     break;
                 }
             case 83: //S
@@ -66,7 +100,7 @@ export default function Tv() {
                     };
 
                     const tv: any = document.getElementById('tv');
-                    
+
                     // camera update
                     if (Player.positionOnTV.y >= tv.height - (I.PIXEL.BLOCK * I.SCALE * 3)) {
                         // move camera with player.
@@ -78,7 +112,14 @@ export default function Tv() {
                         Player.move(I.DIRECTION.DOWN);
                     };
 
-                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
+                    const currentSquareEventID: number = Background.grid[Player.currentLocationOnGrid.y][Player.currentLocationOnGrid.x];
+
+                    // check for triggered events
+                    if (currentSquareEventID >= 40) {
+                        mapEvents(currentSquareEventID);
+                    };
+
+                    console.table(`Current Block: [${Player.currentLocationOnGrid.x},${[Player.currentLocationOnGrid.y]}]`);
                     break;
                 }
             case 65: //A
@@ -100,7 +141,14 @@ export default function Tv() {
                         Player.move(I.DIRECTION.LEFT);
                     }
 
-                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
+                    const currentSquareEventID: number = Background.grid[Player.currentLocationOnGrid.y][Player.currentLocationOnGrid.x];
+
+                    // check for triggered events
+                    if (currentSquareEventID >= 40) {
+                        mapEvents(currentSquareEventID);
+                    };
+
+                    console.table(`Current Block: [${Player.currentLocationOnGrid.x},${[Player.currentLocationOnGrid.y]}]`);
                     break;
                 }
             case 68: //D
@@ -123,7 +171,14 @@ export default function Tv() {
                         Player.move(I.DIRECTION.RIGHT);
                     }
 
-                    console.table(`Current Block: ${Player.currentLocationOnGrid.x}${[Player.currentLocationOnGrid.y]}`);
+                    const currentSquareEventID: number = Background.grid[Player.currentLocationOnGrid.y][Player.currentLocationOnGrid.x];
+
+                    // check for triggered events
+                    if (currentSquareEventID >= 40) {
+                        mapEvents(currentSquareEventID);
+                    };
+
+                    console.table(`Current Block: [${Player.currentLocationOnGrid.x},${[Player.currentLocationOnGrid.y]}]`);
                     break;
                 }
             case 67:

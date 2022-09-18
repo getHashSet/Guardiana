@@ -1,8 +1,29 @@
 import * as I from '../../../../utils/types';
+import worldMap from '../worldMap';
 import imageBottom from './battle01Bottom.png';
 import imageTop from './battle01Top.png';
 
+const getMap = (eventID: number) => {
+    switch (eventID) {
+        case 41:
+            const mapData = worldMap;
+            mapData.heroStartLocations = [{
+                name: 'Max',
+                x: 27,
+                y: 23
+            }];
+            mapData.cameraStartLocation = {
+                x: 23,
+                y: 20
+            }
+            return mapData
+        default:
+            return battle01
+    }
+};
+
 const battle01: I.Map = {
+    name: "Ol' Cliffside Ruins",
     imageBottom,
     imageTop,
     mapDimentions: {
@@ -30,6 +51,7 @@ const battle01: I.Map = {
         [0, 9, 9, 9, 6, 6, 9, 9, 9, 9, 6, 6, 6, 6, 6, 0],
         [0, 9, 9, 9, 9, 6, 6, 9, 9, 6, 6, 6, 6, 6, 6, 0],
         [0, 9, 9, 9, 9, 9, 6, 9, 9, 6, 6, 6, 6, 6, 6, 0],
+        [0, 0, 0, 0, 0, 0, 0,41,41, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
 
@@ -50,7 +72,11 @@ const battle01: I.Map = {
     npcStartLocations: [null],
     enemyStartLocations: [
         { name: 'Hero 01', x: 1, y: 1 }
-    ]
+    ],
+
+    events: {
+        getMap
+    }
 }
 
 export default battle01;

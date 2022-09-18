@@ -11,14 +11,25 @@ export class Map {
     public heroStartLocations: { name: string, x: number, y: number }[];
     public enemyStartLocations: { name: string, x: number, y: number }[] | null[];
     public npcStartLocations: { name: string, x: number, y: number }[] | null[];
+    private hasTopImage: boolean;
+    public events: any; // TODO Type this beast
+    public name: string;
 
     constructor(map: I.Map) {
+        this.name = map.name;
 
         // === Images === //
         this.bottomImage = new Image()
-        this.topImage = new Image()
         this.bottomImage.src = map.imageBottom
-        this.topImage.src = map.imageTop
+
+        this.hasTopImage = map.imageTop !== null;
+
+        if (!map.imageTop) {
+            this.hasTopImage = false;
+        } else {
+            this.topImage = new Image()
+            this.topImage.src = map.imageTop
+        }
 
         this.heroStartLocations = map.heroStartLocations
         this.enemyStartLocations = map.enemyStartLocations
@@ -41,6 +52,9 @@ export class Map {
             width: map.mapDimentions.x * I.PIXEL.BLOCK,
             height: map.mapDimentions.y * I.PIXEL.BLOCK
         }
+
+        // === EVENTS === //
+        this.events = map.events;
 
     }
 
@@ -92,6 +106,9 @@ export class Map {
     }
 
     drawMapTop() {
+
+        if (!this.hasTopImage) { return };
+
         const canvas: any = document.getElementById('tv');
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;

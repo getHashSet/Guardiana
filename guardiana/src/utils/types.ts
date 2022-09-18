@@ -18,7 +18,7 @@ export enum DIRECTION {
 }
 
 // Scale pixel images by this number.
-export const SCALE: number = 2;
+export const SCALE: number = 3;
 
 
 // ================== //
@@ -82,13 +82,15 @@ export interface Item {
 }
 
 export interface Map {
+    name: string;
+
     /* === Layer 0 for the map. This will be behind everything.
     NOTE this is the only layer that can be a jpg. === */
     // example: "/asset/map/city/Loom.png";
     imageBottom: string;
 
     // === Layer 8 for the map. This will be over everything. Including over the player === //
-    imageTop: string;
+    imageTop: string | null;
 
     // === Map size in squares === //
     // example: { x: 10, y: 20 } would make a 240px by 480px map
@@ -130,4 +132,6 @@ export interface Map {
 
     // === The location of Enemy assets === //
     enemyStartLocations: { name: string, x: number, y: number }[] | null[];
+
+    events: any;
 }

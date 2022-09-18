@@ -1,8 +1,29 @@
 import * as I from '../../../../utils/types';
 import GuardianaCityBottom from './GuardianaBottom.png';
 import GrandianaCityTop from './GuardianaTop.png';
+import worldMap from '../worldMap';
+
+const getMap = (eventID: number) => {
+    switch (eventID) {
+        case 41:
+            const mapData = worldMap;
+            mapData.heroStartLocations = [{
+                name: 'Max',
+                x: 9,
+                y: 21
+            }];
+            mapData.cameraStartLocation = {
+                x: 5,
+                y: 19
+            }
+            return worldMap
+        default:
+            return guardianaCity
+    }
+};
 
 export const guardianaCity: I.Map = {
+    name: "Guardiana",
 
     imageBottom: GuardianaCityBottom,
 
@@ -51,11 +72,11 @@ export const guardianaCity: I.Map = {
         [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0],
         [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0],
         [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0],
-        [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0],
+        [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 41, 41, 41, 41, 41, 41, 9, 9, 9, 9, 9, 9, 9, 9, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
 
-    pixelOffset: { x: 0, y: 16  },
+    pixelOffset: { x: 0, y: 16 },
 
     cameraStartLocation: { x: 30, y: 36 }, // the square on the map
 
@@ -70,5 +91,9 @@ export const guardianaCity: I.Map = {
     npcStartLocations: [null],
 
     enemyStartLocations: [null],
+
+    events: {
+        getMap
+    }
 
 }
