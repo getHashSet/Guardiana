@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import face from '../../assets/characters/Max/base/max-face.png';
-import frame from './frame.png';
+import * as S from '../../styles';
 
 class Face {
     public position: { x: number, y: number };
@@ -55,7 +55,7 @@ class Face {
         console.log('talky talky');
     }
 
-    randomNumber (min: number, max: number) {
+    randomNumber(min: number, max: number) {
         return Math.floor(Math.random() * (max - min) + min);
     }
 
@@ -123,30 +123,24 @@ export default function FaceWindow() {
     const _face = new Face();
 
     return (
+
         <StyledFaceBlock>
             <canvas id="face" />
         </StyledFaceBlock>
     )
 }
 
-const StyledFaceBlock = styled('div')`
+const StyledFaceBlock = styled(S.Window)`
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     top: 2em;
     left: 2em;
-    border: 3px solid white;
     overflow: hidden;
     width: 13em;
     height: 17em;
-    border: 24px solid yellow;
-    border-radius: 1em;
     background-color: black;
-    border-image-source: url(${frame});
-    border-image-slice: 12 12;
-    border-image-repeat: round;
-    border-image-outset: 0;
 
     canvas {
         width: 192px;

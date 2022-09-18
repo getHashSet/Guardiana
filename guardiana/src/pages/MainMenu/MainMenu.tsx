@@ -1,5 +1,5 @@
 import { Page } from '../../styles';
-import titleScreen from '../../assets/utils/simon_body.png';
+import titleScreen from '../../assets/misc/simon_body.png';
 import { Link } from 'react-router-dom';
 
 function MainMenu() {

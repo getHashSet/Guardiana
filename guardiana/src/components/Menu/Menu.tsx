@@ -44,16 +44,28 @@ export default function Menu() {
         setMenu(MenuState.Closed);
     }
 
-    // ======================= //
-    // === EVENT LISTENERS === //
-    // ======================= //
-    window.addEventListener('keydown', ({ keyCode }) => {
+    const listenForKeyDown = ({keyCode}: any) => {
         cleanup();
 
         if (keyCode === 77) {
             toggleFieldMenu();
         };
-    });
+    }
+
+    // =============== //
+    // === ON LOAD === //
+    // =============== //
+    useEffect(() => {
+      return () => {
+        window.removeEventListener('keydown', listenForKeyDown);
+      }
+    }, [])
+    
+
+    // ======================= //
+    // === EVENT LISTENERS === //
+    // ======================= //
+    window.addEventListener('keydown', listenForKeyDown);
 
     // ============== //
     // === RETURN === //

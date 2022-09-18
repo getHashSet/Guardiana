@@ -28,9 +28,7 @@ export default function Tv() {
     // ================ //
     // === MOVEMENT === //
     // ================ //
-    window.addEventListener('keydown', ({ keyCode }) => {
-
-        console.log(keyCode)
+    const movement = ({ keyCode }: any) => {
 
         switch (keyCode) {
             case 87: //W //UP
@@ -126,13 +124,15 @@ export default function Tv() {
                 }
             case 67:
                 {
-                    Background.cameraToTarget({x: Player.currentLocationOnGrid.x, y: Player.currentLocationOnGrid.y})
+                    Background.cameraToTarget({ x: Player.currentLocationOnGrid.x, y: Player.currentLocationOnGrid.y })
                 }
                 break;
             default:
                 break;
         }
-    });
+    };
+
+    window.addEventListener('keydown', movement);
 
     useEffect(() => {
         mounted = true;
@@ -145,6 +145,7 @@ export default function Tv() {
         return () => {
             mounted = false;
             console.log('TV Unmounted');
+            window.removeEventListener("keydown", movement);
         }
 
     }, [Update]);

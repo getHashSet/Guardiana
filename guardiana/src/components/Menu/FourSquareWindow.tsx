@@ -1,17 +1,18 @@
 import styled from 'styled-components';
+import Square from './Square';
 
 export default function FourSquareWindow() {
   return (
     <StyledFieldOptions>
       <div>
-        <StyledBlock />
+        <Square />
       </div>
       <div>
-        <StyledBlock />
-        <StyledBlock />
+        <Square />
+        <Square />
       </div>
       <div>
-        <StyledBlock />
+        <Square />
       </div>
     </StyledFieldOptions>
   )
@@ -29,15 +30,10 @@ const StyledFieldOptions = styled('div')`
   div {
     display: block;
     width:  5em;
-  }
-`;
 
-const StyledBlock = styled('button')`
-    text-decoration: none;
-    border: none;
-    width: 5em;
-    height: 7em;
-    margin-bottom: 1em;
-    border-radius: 1em;
-    background-color: orange;
+    &:nth-child(2) {
+      margin: .5em;
+    }
+  }
+
 `;

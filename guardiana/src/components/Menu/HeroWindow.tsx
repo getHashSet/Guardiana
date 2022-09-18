@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import frame from './frame.png';
+import * as S from '../../styles';
 
 export default function HeroWindow() {
 
@@ -12,50 +12,44 @@ export default function HeroWindow() {
     const remainingMagicPoints = maxMagicPoints - magicPointsUsed;
 
     return (
-        <StyledStatBlock>
 
-            <h3>Name</h3>
+            <StyledStatBlock>
 
-            <h3>Lv</h3>
+                <h3>Name</h3>
 
-            <HitPointBlock>
-                <h3>HP</h3>
-                <HitPointBar remainingPoints={maxHitPoints} pointsUsed={damageTaken}>
-                    <div />
-                    <div />
-                </HitPointBar>
-                <h3>
-                    {remainingHitPoints} / {maxHitPoints}
-                </h3>
-            </HitPointBlock>
+                <h3>Lv</h3>
 
-            <MagicPointBlock>
-                <h3>MP</h3>
-                <MagicPointBar remainingPoints={8} pointsUsed={0}>
-                    <div />
-                    <div />
-                </MagicPointBar>
-                <h3>
-                    {remainingMagicPoints} / {maxMagicPoints}
-                </h3>
-            </MagicPointBlock>
+                <HitPointBlock>
+                    <h3>HP</h3>
+                    <HitPointBar remainingPoints={maxHitPoints} pointsUsed={damageTaken}>
+                        <div />
+                        <div />
+                    </HitPointBar>
+                    <h3>
+                        {remainingHitPoints} / {maxHitPoints}
+                    </h3>
+                </HitPointBlock>
 
-        </StyledStatBlock>
+                <MagicPointBlock>
+                    <h3>MP</h3>
+                    <MagicPointBar remainingPoints={8} pointsUsed={0}>
+                        <div />
+                        <div />
+                    </MagicPointBar>
+                    <h3>
+                        {remainingMagicPoints} / {maxMagicPoints}
+                    </h3>
+                </MagicPointBlock>
+
+            </StyledStatBlock>
     )
 }
 
-const StyledStatBlock = styled('div')`
+const StyledStatBlock = styled(S.Window)`
     position: absolute;
     top: 2em;
     right: 3em;
     min-width: 15em;
-    border: 24px solid yellow;
-    border-radius: 1em;
-    background-color: darkblue;
-    border-image-source: url(${frame});
-    border-image-slice: 12 12;
-    border-image-repeat: round;
-    border-image-outset: 0;
 `;
 
 const PointBlock = styled('div')`
