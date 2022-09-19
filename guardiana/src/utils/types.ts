@@ -35,6 +35,7 @@ export interface Character {
     experience: number;
     hitPoints: number;
     damageTaken: number;
+    isPromoted: boolean | null;
     magic: {
         usesMagic: boolean;
         magicPoints: number;

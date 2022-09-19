@@ -8,8 +8,11 @@ export class Character {
     private lastUpdate: any;
     private animate: { isAnimated: boolean, animationFlag: boolean };
     public currentLocationOnGrid: { x: number, y: number };
+    public characterName: string
 
-    constructor(spawnLocation: { name: string, x: number, y: number }, cameraPosition: {x: number, y: number}, spriteSheet: any, animate: boolean = true) {
+    constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true) {
+        
+        this.characterName = characterName,
 
         this.animate = {
             isAnimated: animate,
