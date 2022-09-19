@@ -3,6 +3,8 @@
 // ============= //
 export enum ACTIONS {
     SET_MAP = 'SET_MAP',
+    SET_HERO_ROSTER = 'SET_HERO_ROSTER',
+    SET_TARGET = 'SET_TARGET',
     TEST = 'TEST'
 }
 
@@ -17,20 +19,33 @@ export enum DIRECTION {
     DOWN
 }
 
-// Scale pixel images by this number.
-export const SCALE: number = 3;
+export enum ITEM {
+    NONE,
 
+    // === WEAPONS === //
+    SHORT_SWORD,
+
+    // === ITEMS === //
+    HERB,
+    HEALING_SEED,
+
+    // === MISC === //
+    BIKINI
+}
+
+// Scale pixel images by this number.
+export const SCALE: number = 3
 
 // ================== //
 // === INTERFACES === //
 // ================== //
 export interface Character {
-    name: string;
+    characterName: string;
     class: string;
-    spriteSheet: any;       // JPG
-    faceSpriteSheet: any;   // JPG
-    combatSpriteSheet: any; // JPG
-    weaponSpriteSheet: any; // JPG
+    spriteSheet: string[];
+    faceSpriteSheet: string[];
+    combatSpriteSheet: string[];
+    weaponSpriteSheet: any; // I need to resolve weapon lists being un typed
     level: number;
     experience: number;
     hitPoints: number;
@@ -45,7 +60,7 @@ export interface Character {
             Spell,
             Spell,
             Spell
-        ]
+        ] | null[]
     };
     stamina: {
         usesStamina: boolean;
@@ -60,10 +75,10 @@ export interface Character {
         move: number;
     }
     items: {
-        slot_1: Item;
-        slot_2: Item;
-        slot_3: Item;
-        slot_4: Item;
+        slot_top: ITEM;
+        slot_right: ITEM;
+        slot_left: ITEM;
+        slot_bottom: ITEM;
     }
     equip: {
         isEquip: boolean;

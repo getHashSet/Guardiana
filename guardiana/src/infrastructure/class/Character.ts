@@ -1,9 +1,10 @@
 import * as I from '../../utils/types';
+import { Targetable } from './Targetable';
 
-export class Character {
+export class Character extends Targetable {
     public positionOnTV: { x: number, y: number };
     private size: any;
-    private sprite: any;
+    public sprite: any;
     private spriteGrid: any;
     private lastUpdate: any;
     private animate: { isAnimated: boolean, animationFlag: boolean };
@@ -11,8 +12,9 @@ export class Character {
     public characterName: string
 
     constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true) {
-        
-        this.characterName = characterName,
+        super()
+
+        this.characterName = characterName
 
         this.animate = {
             isAnimated: animate,
@@ -44,6 +46,7 @@ export class Character {
         this.lastUpdate = Date.now();
 
         this.sprite = new Image();
+
         this.sprite.src = spriteSheet;
     }
 

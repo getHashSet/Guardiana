@@ -1,1 +1,3 @@
-export * from './Toa';
+import Toa from './Toa';
+
+export default Toa;
