@@ -3,9 +3,13 @@ import * as I from '../../utils/types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMap } from '../../redux/actions';
 import { useEffect } from 'react';
-import spriteSheet_max from '../../assets/characters/Max/base/sprite-max.png';
 import { Character } from '../../infrastructure/class/Character';
 import { Map } from '../../infrastructure/class/Map';
+
+// ============ //
+// === TEMP === //
+// ============ //
+import Max from '../../assets/characters/Max';
 
 // ================= //
 // === COMPONENT === //
@@ -15,7 +19,7 @@ export default function Tv() {
     let mounted: boolean = true;
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
     const Background = new Map(map);
-    const Player = new Character(Background.heroStartLocations[0], Background.cameraLocation, spriteSheet_max);
+    const Player = new Character(Max.characterName, Background.heroStartLocations[0], Background.cameraLocation, Max.spriteSheet[0], true);
 
     const updateMap = (nextMap: I.Map) => {
         setTimeout(() => {

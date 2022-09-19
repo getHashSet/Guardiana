@@ -50,3 +50,5 @@ export const Max: I.Character = {
         slot: -1,
     },
 }
+
+export default Max

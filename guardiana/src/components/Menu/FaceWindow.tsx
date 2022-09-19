@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import face from '../../assets/characters/Max/base/max-face.png';
+import face from '../../assets/characters/Max/base/sprite-face-max.png';
 import * as S from '../../styles';
 
 class Face {
