@@ -16,6 +16,7 @@ import Max from '../../assets/characters/Max';
 // ================= //
 export default function Tv() {
     const dispatch = useDispatch();
+    const fps = 60;
     let mounted: boolean = true;
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
     const Background = new Map(map);
@@ -41,19 +42,33 @@ export default function Tv() {
                     updateMap(nextMap);
                 }
                 break;
+            case 43: // update map exit 3
+                {
+                    const nextMap = Background.events.getMap(eventID);
+                    updateMap(nextMap);
+                }
+                break;
             default:
-                console.log('bad event in worldMap, Chapter 01');
+                console.log('bad map event in Game.tsx');
                 break;
         }
     };
 
     const Update = () => {
-        if (!mounted) { return };
-        Background.drawMapBottom();
-        Player.draw();
-        Background.drawMapTop();
 
-        requestAnimationFrame(Update);
+        if (!mounted) { return };
+
+        try {
+
+            Background.drawMapBottom();
+            Player.draw();
+            Background.drawMapTop();
+        } finally {
+            setTimeout(() => {
+                requestAnimationFrame(Update);
+            }, 1000 / fps)
+
+        };
     };
 
     // ================ //

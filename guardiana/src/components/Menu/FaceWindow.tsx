@@ -78,6 +78,7 @@ export default function FaceWindow() {
     let animationTimeout: number = 0;
     let componentMounted: boolean = true;
     let isTalking: boolean = true;
+    const fps: number = 10;
 
     function getRandomArbitrary(min: number, max: number) {
         return Math.random() * (max - min) + min;
@@ -106,7 +107,10 @@ export default function FaceWindow() {
         };
 
         // Unless we "returned" out of this function. CALL IT AGAIN!
-        requestAnimationFrame(Update);
+        
+        setTimeout(() => {
+            requestAnimationFrame(Update);
+        }, 1000 / fps)
 
     };
 
