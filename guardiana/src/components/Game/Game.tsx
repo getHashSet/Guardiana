@@ -10,17 +10,22 @@ import { Map } from '../../infrastructure/class/Map';
 // === TEMP === //
 // ============ //
 import Max from '../../assets/characters/Max';
+import Tao from '../../assets/characters/Tao';
+import Adam from '../../assets/characters/Adam';
 
 // ================= //
 // === COMPONENT === //
 // ================= //
 export default function Tv() {
     const dispatch = useDispatch();
-    const fps = 60;
+    const fps = 30;
     let mounted: boolean = true;
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map);
     const Background = new Map(map);
     const Player = new Character(Max.characterName, Background.heroStartLocations[0], Background.cameraLocation, Max.spriteSheet[0], true);
+    const Player2 = new Character(Tao.characterName, Background.heroStartLocations[1], Background.cameraLocation, Tao.spriteSheet[0], true);
+    const Player3 = new Character(Adam.characterName,Background.heroStartLocations[2], Background.cameraLocation, Adam.spriteSheet[0], true);
+    const objectsOnLayer1 = [Player, Player2, Player3];
 
     const updateMap = (nextMap: I.Map) => {
         setTimeout(() => {
@@ -58,12 +63,24 @@ export default function Tv() {
 
         if (!mounted) { return };
 
+        const layer1_el: any = document.getElementById('layer-1');
+        const layer2_el: any = document.getElementById('layer-2');
+        const layer1 = layer1_el.getContext('2d');
+        const layer2 = layer2_el.getContext('2d');
+
+
         try {
 
-            Background.drawMapBottom();
-            Player.draw();
-            Background.drawMapTop();
+            layer1.clearRect(0, 0, layer1_el.width, layer1_el.height);
+            layer2.clearRect(0, 0, layer2_el.width, layer2_el.height);
+
+            Background.draw();
+            objectsOnLayer1.forEach((objectOnCanvasLayer1: Character) => {
+                objectOnCanvasLayer1.draw();
+            });
+
         } finally {
+
             setTimeout(() => {
                 requestAnimationFrame(Update);
             }, 1000 / fps)
@@ -92,7 +109,11 @@ export default function Tv() {
                     // check if camera update is needed
                     if (Player.positionOnTV.y <= 2 * (I.PIXEL.BLOCK * I.SCALE)) {
                         Background.move(I.DIRECTION.UP);
-                        Player.currentLocationOnGrid.y--;
+                        objectsOnLayer1.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.y--;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.DOWN);
+                        });
                         Player.Update();
                     } else {
                         Player.move(I.DIRECTION.UP);
@@ -118,13 +139,16 @@ export default function Tv() {
                         return;
                     };
 
-                    const tv: any = document.getElementById('tv');
+                    const tv: any = document.getElementById('layer-1');
 
                     // camera update
                     if (Player.positionOnTV.y >= tv.height - (I.PIXEL.BLOCK * I.SCALE * 3)) {
-                        // move camera with player.
                         Background.move(I.DIRECTION.DOWN);
-                        Player.currentLocationOnGrid.y++;
+                        objectsOnLayer1.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.y++;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.UP);
+                        });
                         Player.Update();
                     }
                     else {
@@ -154,7 +178,12 @@ export default function Tv() {
                     // check if we need to move the camera
                     if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 2 * I.SCALE) {
                         Background.move(I.DIRECTION.RIGHT);
-                        Player.currentLocationOnGrid.x--;
+                        objectsOnLayer1.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.x--;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.RIGHT);
+                            console.log(`${objectOnLayer.characterName}: Current Block: [${objectOnLayer.currentLocationOnGrid.x},${objectOnLayer.currentLocationOnGrid.y}]`)
+                        });
                         Player.Update();
                     } else {
                         Player.move(I.DIRECTION.LEFT);
@@ -180,11 +209,15 @@ export default function Tv() {
                         return;
                     };
 
-                    const tv: any = document.getElementById('tv');
+                    const tv: any = document.getElementById('layer-1');
 
                     if (Player.positionOnTV.x >= tv.width - (I.PIXEL.BLOCK * I.SCALE * 3)) {
                         Background.move(I.DIRECTION.LEFT);
-                        Player.currentLocationOnGrid.x++;
+                        objectsOnLayer1.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.x++;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.LEFT);
+                        });
                         Player.Update();
                     } else {
                         Player.move(I.DIRECTION.RIGHT);
@@ -214,9 +247,19 @@ export default function Tv() {
 
     useEffect(() => {
         mounted = true;
-        const canvas: any = document.getElementById('tv');
-        canvas.setAttribute('width', 576);
-        canvas.setAttribute('height', 480);
+
+        const canvas_layer_1: any = document.getElementById('layer-1');
+        canvas_layer_1.setAttribute('width', 576);
+        canvas_layer_1.setAttribute('height', 480);
+
+        const canvas_layer_2: any = document.getElementById('layer-2');
+        canvas_layer_2.setAttribute('width', 576);
+        canvas_layer_2.setAttribute('height', 480);
+
+        const canvas_layer_0: any = document.getElementById('layer-0');
+        canvas_layer_0.setAttribute('width', 576);
+        canvas_layer_0.setAttribute('height', 480);
+
         console.log('TV mounted');
         Update();
 
@@ -229,20 +272,34 @@ export default function Tv() {
     }, [Update]);
 
     return (
-        <StyledTv id="tv" />
+        <StyledTvWrapper>
+            <StyledTv id="layer-0" />
+            <StyledTv id="layer-1" />
+            <StyledTv id="layer-2" />
+        </StyledTvWrapper>
     );
 };
 
 // ============== //
 // === STYLES === //
 // ============== //
-const StyledTv = styled('canvas')`
+const StyledTvWrapper = styled('section')`
+    position: relative;
     width: 90vw;
     max-width: 1080px;
+    height: 100vh;
+`;
+
+const StyledTv = styled('canvas')`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
     height: auto;
     overflow: hidden;
     border: 5px solid #0a0a0a;
-    background-color: slategrey;
+    background-color: transparent;
     border-radius: 2em;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;

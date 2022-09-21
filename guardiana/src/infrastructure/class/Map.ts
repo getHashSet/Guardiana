@@ -77,16 +77,21 @@ export class Map {
         }
     }
 
-    // Make anything outside the map black.
+    //Make anything outside the map black.
     Oblivion() {
-        const canvas: any = document.getElementById('tv');
+        const canvas: any = document.getElementById('layer-0');
         const ctx = canvas.getContext('2d');
         ctx.rect(-24, -24, canvas.offsetWidth, canvas.offsetHeight);
         ctx.fill();
     }
 
+    draw() {
+        this.drawMapBottom();
+        this.drawMapTop();
+    }
+
     drawMapBottom() {
-        const canvas: any = document.getElementById('tv');
+        const canvas: any = document.getElementById('layer-0');
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
 
@@ -109,7 +114,7 @@ export class Map {
 
         if (!this.hasTopImage) { return };
 
-        const canvas: any = document.getElementById('tv');
+        const canvas: any = document.getElementById('layer-2');
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
 

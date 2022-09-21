@@ -34,7 +34,7 @@ export enum ITEM {
 }
 
 // Scale pixel images by this number.
-export const SCALE: number = 3
+export const SCALE: number = 2
 
 // ================== //
 // === INTERFACES === //

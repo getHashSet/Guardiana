@@ -1,15 +1,15 @@
-import baseSprite from './sprite-toa.png';
-import promotedSprite from './sprite-toa2.png';
-import altSprite from './sprite-toa3.png';
+import baseSprite from './sprite-tao.png';
+import promotedSprite from './sprite-tao2.png';
+import altSprite from './sprite-tao3.png';
 
 interface ICharacterProps {
     characterName: string,
-    spriteSheets: string[]
+    spriteSheet: string[]
 }
 
 export const Toa: ICharacterProps = {
     characterName: 'Toa',
-    spriteSheets: [
+    spriteSheet: [
         baseSprite,
         promotedSprite,
         altSprite

@@ -9,10 +9,12 @@ export class Character extends Targetable {
     private lastUpdate: any;
     private animate: { isAnimated: boolean, animationFlag: boolean };
     public currentLocationOnGrid: { x: number, y: number };
-    public characterName: string
+    public characterName: string;
 
     constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true) {
         super()
+
+        spawnLocation = spawnLocation ?? {x: 0, y: 0}
 
         this.characterName = characterName
 
@@ -30,8 +32,6 @@ export class Character extends Targetable {
             x: spawnLocation.x,
             y: spawnLocation.y
         }; // You place on the map.
-
-        console.table(this.currentLocationOnGrid);
 
         this.size = {
             width: I.PIXEL.BLOCK,
@@ -78,6 +78,7 @@ export class Character extends Targetable {
     }
 
     move(direction: I.DIRECTION) {
+        
         try {
             switch (direction) {
                 case I.DIRECTION.DOWN:
@@ -130,9 +131,10 @@ export class Character extends Targetable {
             y: I.PIXEL.BLOCK * I.SCALE
         }
 
-        let ctx: any = document.getElementById('tv');
+        let ctx: any = document.getElementById('layer-1');
         ctx = ctx.getContext('2d');
         ctx.imageSmoothingEnabled = false;
+
         ctx.drawImage(
             this.sprite,
             this.spriteGrid.x,
