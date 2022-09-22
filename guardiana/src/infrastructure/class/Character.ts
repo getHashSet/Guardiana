@@ -73,7 +73,7 @@ export class Character extends Targetable {
                     break;
             }
         } finally {
-            this.Update();
+            this.update();
         }
     }
 
@@ -101,7 +101,7 @@ export class Character extends Targetable {
                     break;
             }
         } finally {
-            this.Update();
+            this.update();
         }
 
     }
@@ -147,7 +147,7 @@ export class Character extends Targetable {
             spriteFinalSizeInPixels.y);
     }
 
-    Update() {
+    update() {
         this.draw();
     }
 }

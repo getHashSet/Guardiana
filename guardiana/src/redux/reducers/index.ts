@@ -8,7 +8,6 @@ const allReducers = combineReducers({
     test: test_reducer,
     map: map_reducer,
     heroRoster: hero_roster_reducer
-
 });
 
 export default allReducers;

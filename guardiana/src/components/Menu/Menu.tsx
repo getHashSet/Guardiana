@@ -56,6 +56,10 @@ export default function Menu() {
     // === ON LOAD === //
     // =============== //
     useEffect(() => {
+
+        // ================ //
+        // === CLEAN UP === //
+        // ================ //
       return () => {
         window.removeEventListener('keydown', listenForKeyDown);
       }
@@ -89,6 +93,9 @@ export default function Menu() {
     )
 }
 
+// ============== //
+// === STYLES === //
+// ============== //
 const StyledMenuFrame = styled('div')`
     position: absolute;
     top: 0;

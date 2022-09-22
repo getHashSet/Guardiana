@@ -1,12 +1,20 @@
 import Menu from '../../components/Menu/Menu';
-import Tv from '../../components/Game/Game';
+import TV from '../../components/TV/TV';
 import styled from 'styled-components';
 
+// ================= //
+// === COMPONENT === //
+// ================= //
+/*
+This component will load in:
+- TV
+- Menus
+*/
 export default function Game() {
     return (
         <StyledGameWrapper>
             <Menu />
-            <Tv />
+            <TV />
         </StyledGameWrapper>
     )
 }
