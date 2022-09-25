@@ -5,11 +5,6 @@ import styled from 'styled-components';
 // ================= //
 // === COMPONENT === //
 // ================= //
-/*
-This component will load in:
-- TV
-- Menus
-*/
 export default function Game() {
     return (
         <StyledGameWrapper>

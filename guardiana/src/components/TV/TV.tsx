@@ -127,7 +127,6 @@ export default function Tv() {
                     Player.face(I.DIRECTION.UP);
 
                     // check for blocks
-
                     const nextSquare: number = Background.grid[Player.currentLocationOnGrid.y - 1][Player.currentLocationOnGrid.x];
                     if (nextSquare <= 7) {
                         console.log(`boop`);
