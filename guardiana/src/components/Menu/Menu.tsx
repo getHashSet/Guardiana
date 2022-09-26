@@ -75,7 +75,7 @@ export default function Menu() {
     // === RETURN === //
     // ============== //
     return (
-        <StyledMenuFrame onClick={onClickHandler}>
+        <StyledMenuFrame>
 
             {Number(menu) === Number(!MenuState.Closed) ? null : null}
 

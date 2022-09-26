@@ -18,19 +18,19 @@ export default function Tv() {
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map); // TODO this is refreshing the whole component and not just the map
     const Background: Map = new Map(map);
     const [heroRoster, setHeroRoster]: [I.Character[], Function] = useState(useSelector((state: { heroRoster: I.Character[] }) => state.heroRoster)); // TODO this is refreshing the whole component and not just the roster
-    let heroCharacters: Character[] = [new Character(Max.characterName, Background.heroStartLocations[0], Background.cameraLocation, Max.spriteSheet[0], true)];
+    let heroCharacters: Character[] = [new Character(Max, Background.heroStartLocations[0], Background.cameraLocation)];
     let Player: Character = heroCharacters[0]; // TODO this should be a target and not always who is in slot 0
     const [enemyRoster, setEnemyRoster]: [I.Character[], Function] = useState(useSelector((state: { enemyRoster: I.Character[] }) => state.enemyRoster));
     let enemyCharacters: Character[] = [];
     let currentFocused: number = 0;
 
     enemyCharacters = Background.enemyStartLocations.map((startLocation: { name: string, x: number, y: number }, index: number) => {
-        const newEnemy = new Character(enemyRoster[index].characterName, startLocation, Background.cameraLocation, enemyRoster[index].spriteSheet[0], true);
+        const newEnemy = new Character(enemyRoster[index], startLocation, Background.cameraLocation);
         return newEnemy;
     });
 
     heroCharacters = Background.heroStartLocations.filter((_, index: number) => heroRoster[index] !== undefined).map((startLocation: { name: string, x: number, y: number }, index: number) => {
-        const newCharacter = new Character(heroRoster[index].characterName, startLocation, Background.cameraLocation, heroRoster[index].spriteSheet[0], true);
+        const newCharacter = new Character(heroRoster[index], startLocation, Background.cameraLocation);
         return newCharacter;
     });
 
@@ -86,7 +86,11 @@ export default function Tv() {
 
         if (!mounted) { return };
 
-        Player = heroCharacters[currentFocused] ?? heroCharacters[0];
+        if (Player.alignment !== I.ALIGNMENT.EVIL) {
+            Player = heroCharacters[currentFocused] ?? heroCharacters[0];
+        } else {
+            Player = enemyCharacters[currentFocused] ?? heroCharacters[0];
+        }
 
         const layer1_el: any = document.getElementById('layer-1');
         const layer2_el: any = document.getElementById('layer-2');
@@ -104,15 +108,17 @@ export default function Tv() {
 
             enemyCharacters.forEach((enemy: Character, index: number) => {
                 enemy.update();
+                // TODO enemy updates on wrong layer.
             })
 
             heroCharacters.forEach((hero: Character, index: number) => {
-                if (index !== 0) {
+                if (index !== currentFocused) {
                     hero.update();
+                    // TODO heros updates on wrong layer.
                 }
             });
 
-            heroCharacters[0].update();
+            heroCharacters[currentFocused].update();
 
         } finally {
 
@@ -134,7 +140,7 @@ export default function Tv() {
                     currentFocused = 0
                     Player = heroCharacters[currentFocused] ?? heroCharacters[0];
                     // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget( Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
                 }
                 break;
             case 50: //2
@@ -142,15 +148,15 @@ export default function Tv() {
                     currentFocused = 1
                     Player = heroCharacters[1] ?? heroCharacters[0];
                     // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget( Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
                 }
                 break;
             case 51: // 3
                 {
-                    currentFocused = 2
-                    Player = heroCharacters[2] ?? heroCharacters[0];
+                    currentFocused = 0
+                    Player = enemyCharacters[0] ?? heroCharacters[0];
                     // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget( Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
                 }
                 break;
             case 87: //W //UP
@@ -363,7 +369,7 @@ export default function Tv() {
         const xEnd = x
         const yEnd = y
 
-        if (xStart === xEnd && yStart === yEnd) {return};
+        if (xStart === xEnd && yStart === yEnd) { return };
 
         setTimeout(() => {
             const yDirection = yStart > yEnd ? I.DIRECTION.UP : I.DIRECTION.DOWN;
@@ -373,7 +379,7 @@ export default function Tv() {
 
             if (yStart !== yEnd) {
                 Background.move(yDirection);
-                
+
                 heroCharacters.forEach((objectOnLayer: Character) => {
                     if (yDirection === I.DIRECTION.DOWN) {
                         objectOnLayer.currentLocationOnGrid.y++;
@@ -390,7 +396,7 @@ export default function Tv() {
                     } else {
                         objectOnLayer.currentLocationOnGrid.y--;
                     };
-                    
+
                     objectOnLayer.move(yOtherObjects);
                 });
             }
@@ -414,7 +420,7 @@ export default function Tv() {
                     } else {
                         objectOnLayer.currentLocationOnGrid.x++;
                     };
-                    
+
                     objectOnLayer.move(xOtherObjects);
                 });
             }

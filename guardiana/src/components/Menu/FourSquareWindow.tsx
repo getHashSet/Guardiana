@@ -1,18 +1,23 @@
 import styled from 'styled-components';
 import Square from './Square';
+import attack from '../../assets/icons/attack.png';
+import magic from '../../assets/icons/magic.png';
+import item from '../../assets/icons/item.jpg';
+import stay from '../../assets/icons/stay.png';
 
 export default function FourSquareWindow() {
+
   return (
     <StyledFieldOptions>
       <div>
-        <Square />
+        <Square icon={magic} />
       </div>
       <div>
-        <Square />
-        <Square />
+        <Square icon={attack} />
+        <Square icon={stay} />
       </div>
       <div>
-        <Square />
+        <Square icon={item} />
       </div>
     </StyledFieldOptions>
   )

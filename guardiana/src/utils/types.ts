@@ -4,6 +4,7 @@
 export enum ACTIONS {
     SET_MAP = 'SET_MAP',
     SET_HERO_ROSTER = 'SET_HERO_ROSTER',
+    SET_ENEMY_ROSTER = 'SET_ENEMY_ROSTER',
     SET_TARGET = 'SET_TARGET',
     TEST = 'TEST'
 }
@@ -72,6 +73,7 @@ export interface Character {
     damageTaken: number;
     isPromoted: boolean | null;
     alignment: ALIGNMENT;
+    isAnimated?: boolean;
     magic: {
         usesMagic: boolean;
         magicPoints: number;

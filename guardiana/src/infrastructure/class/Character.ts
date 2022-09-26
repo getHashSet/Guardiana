@@ -11,18 +11,20 @@ export class Character extends Targetable {
     public currentLocationOnGrid: { x: number, y: number };
     public characterName: string;
     public alignment: I.ALIGNMENT;
+    public stepsTaken: number;
 
-    constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true, alignment: I.ALIGNMENT = I.ALIGNMENT.NEUTRAL) {
+    //constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true, alignment: I.ALIGNMENT = I.ALIGNMENT.NEUTRAL) {
+    constructor(character: I.Character, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }) {
         super()
 
-        this.alignment = alignment
+        this.alignment = character.alignment ?? I.ALIGNMENT.NEUTRAL
 
         spawnLocation = spawnLocation ?? {x: 0, y: 0}
 
-        this.characterName = characterName
+        this.characterName = character.characterName
 
         this.animate = {
-            isAnimated: animate,
+            isAnimated: character.isAnimated ?? true,
             animationFlag: false
         }
 
@@ -50,7 +52,9 @@ export class Character extends Targetable {
 
         this.sprite = new Image();
 
-        this.sprite.src = spriteSheet;
+        this.sprite.src = character.spriteSheet[0];
+
+        this.stepsTaken = 0;
     }
 
     face(direction: I.DIRECTION) {
