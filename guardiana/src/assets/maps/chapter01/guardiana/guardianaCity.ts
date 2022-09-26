@@ -24,6 +24,8 @@ const getMap = (eventID: number) => {
 
 export const guardianaCity: I.Map = {
     name: "Guardiana",
+    
+    isABattleMap: false,
 
     imageBottom: GuardianaCityBottom,
 

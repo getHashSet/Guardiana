@@ -109,5 +109,6 @@ const StyledMenuFrame = styled('div')`
     align-items:  center;
     overflow: hidden;
     transform: translateX(-50%);
+    pointer-events: none; // TODO remove this on menu open otherwise there are not click
     z-index: 9;
 `;

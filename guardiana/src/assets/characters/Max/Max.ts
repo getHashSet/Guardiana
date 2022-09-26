@@ -39,6 +39,7 @@ export const Max: I.Character = {
         defense: 3,
         magicResistance: 3,
         move: 7,
+        speed: 8
     },
     items: {
         slot_top:    I.ITEM.SHORT_SWORD,

@@ -18,19 +18,20 @@ export default function Tv() {
     const map: I.Map = useSelector((state: { map: I.Map }) => state.map); // TODO this is refreshing the whole component and not just the map
     const Background: Map = new Map(map);
     const [heroRoster, setHeroRoster]: [I.Character[], Function] = useState(useSelector((state: { heroRoster: I.Character[] }) => state.heroRoster)); // TODO this is refreshing the whole component and not just the roster
-    let heroCharacters: Character[] = [new Character(Max, Background.heroStartLocations[0], Background.cameraLocation)];
+    let heroCharacters: Character[] = [new Character(Max, Background.heroStartLocations[0], Background.cameraLocation, 9000)];
     let Player: Character = heroCharacters[0]; // TODO this should be a target and not always who is in slot 0
     const [enemyRoster, setEnemyRoster]: [I.Character[], Function] = useState(useSelector((state: { enemyRoster: I.Character[] }) => state.enemyRoster));
     let enemyCharacters: Character[] = [];
     let currentFocused: number = 0;
+    let initiative: Character[] = [] //TODO use Initiative to identify whos next in combat.
 
     enemyCharacters = Background.enemyStartLocations.map((startLocation: { name: string, x: number, y: number }, index: number) => {
-        const newEnemy = new Character(enemyRoster[index], startLocation, Background.cameraLocation);
+        const newEnemy = new Character(enemyRoster[index], startLocation, Background.cameraLocation, index);
         return newEnemy;
     });
 
     heroCharacters = Background.heroStartLocations.filter((_, index: number) => heroRoster[index] !== undefined).map((startLocation: { name: string, x: number, y: number }, index: number) => {
-        const newCharacter = new Character(heroRoster[index], startLocation, Background.cameraLocation);
+        const newCharacter = new Character(heroRoster[index], startLocation, Background.cameraLocation, index);
         return newCharacter;
     });
 
@@ -86,11 +87,12 @@ export default function Tv() {
 
         if (!mounted) { return };
 
-        if (Player.alignment !== I.ALIGNMENT.EVIL) {
-            Player = heroCharacters[currentFocused] ?? heroCharacters[0];
-        } else {
-            Player = enemyCharacters[currentFocused] ?? heroCharacters[0];
-        }
+        // if (Player.alignment !== I.ALIGNMENT.EVIL) {
+        //     Player = initiative[currentFocused]; //heroCharacters[currentFocused] ?? heroCharacters[0];
+        // } else {
+        //     Player = initiative[currentFocused//enemyCharacters[currentFocused] ?? heroCharacters[0];
+        // }
+        Player = initiative[currentFocused];
 
         const layer1_el: any = document.getElementById('layer-1');
         const layer2_el: any = document.getElementById('layer-2');
@@ -112,13 +114,12 @@ export default function Tv() {
             })
 
             heroCharacters.forEach((hero: Character, index: number) => {
-                if (index !== currentFocused) {
-                    hero.update();
-                    // TODO heros updates on wrong layer.
-                }
+                hero.update(); // TODO heros updates on wrong layer.
             });
 
-            heroCharacters[currentFocused].update();
+            if (initiative[currentFocused] !== undefined) {
+                initiative[currentFocused].update()
+            };
 
         } finally {
 
@@ -137,26 +138,11 @@ export default function Tv() {
         switch (keyCode) {
             case 49: //1
                 {
-                    currentFocused = 0
-                    Player = heroCharacters[currentFocused] ?? heroCharacters[0];
+                    currentFocused = initiative[currentFocused + 1] !== undefined ? currentFocused + 1 : 0;
+                    Player = initiative[currentFocused] ?? heroCharacters[0];
+                    console.log(`current focus set to ${initiative[currentFocused].characterName}`);
                     // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
-                }
-                break;
-            case 50: //2
-                {
-                    currentFocused = 1
-                    Player = heroCharacters[1] ?? heroCharacters[0];
-                    // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
-                }
-                break;
-            case 51: // 3
-                {
-                    currentFocused = 0
-                    Player = enemyCharacters[0] ?? heroCharacters[0];
-                    // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                    cameraToTarget(Player.currentLocationOnGrid.x - 4, Player.currentLocationOnGrid.y - 3);
                 }
                 break;
             case 87: //W //UP
@@ -175,13 +161,13 @@ export default function Tv() {
                         Background.move(I.DIRECTION.UP);
                         heroCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.y--;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.DOWN);
                         });
 
                         enemyCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.y--;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.DOWN);
                         });
                         Player.update();
@@ -216,12 +202,12 @@ export default function Tv() {
                         Background.move(I.DIRECTION.DOWN);
                         heroCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.y++;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.UP);
                         });
                         enemyCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.y++;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.UP);
                         });
                         Player.update();
@@ -255,13 +241,13 @@ export default function Tv() {
                         Background.move(I.DIRECTION.RIGHT);
                         heroCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.x--;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.RIGHT);
                             console.log(`${objectOnLayer.characterName}: Current Block: [${objectOnLayer.currentLocationOnGrid.x},${objectOnLayer.currentLocationOnGrid.y}]`)
                         });
                         enemyCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.x--;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.RIGHT);
                             console.log(`${objectOnLayer.characterName}: Current Block: [${objectOnLayer.currentLocationOnGrid.x},${objectOnLayer.currentLocationOnGrid.y}]`)
                         });
@@ -296,12 +282,12 @@ export default function Tv() {
                         Background.move(I.DIRECTION.LEFT);
                         heroCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.x++;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.LEFT);
                         });
                         enemyCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.x++;
-                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            if (objectOnLayer.characterID === Player.characterID) { return };
                             objectOnLayer.move(I.DIRECTION.LEFT);
                         });
                         Player.update();
@@ -351,6 +337,9 @@ export default function Tv() {
         console.log(`Game Started: ${Date.now()}`);
         Update();
 
+        rollInitiative();
+        cameraToTarget(initiative[0].currentLocationOnGrid.x - 4, initiative[0].currentLocationOnGrid.y - 3);
+
         return () => {
             mounted = false;
             console.log(`Game Ended: ${Date.now()}`);
@@ -363,7 +352,7 @@ export default function Tv() {
     // === FUNCTIONS === //
     // ================= //
     const cameraToTarget = (x: number, y: number) => {
-        console.log(`path from ${Background.cameraLocation.x},${Background.cameraLocation.y} to ${x},${y}`);
+        //console.log(`path from ${Background.cameraLocation.x},${Background.cameraLocation.y} to ${x},${y}`);
         const xStart = Background.cameraLocation.x
         const yStart = Background.cameraLocation.y
         const xEnd = x
@@ -430,6 +419,61 @@ export default function Tv() {
         }, 50);
     };
 
+    const initiativeRoll = (min: number, max: number) => {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    const canvasOnClickHandler = (event: any) => {
+        console.log(event);
+    }
+
+    const rollInitiative = () => {
+        const result: Character[] = []
+
+        enemyCharacters.forEach((enemy: Character) => {
+
+            // roll
+            const roll = initiativeRoll(0, 20) + (enemy.stats.speed ? enemy.stats.speed : 0);
+            // set initiative
+            enemy.initiative = roll;
+            // add to list of characters
+            result.push(enemy);
+
+            // // add them to that part of the array
+            // result.splice(roll, 0, enemy)
+            // console.log(`${enemy.characterName} initiative ${roll}`);
+        })
+
+        heroCharacters.forEach((hero: Character) => {
+
+            const roll = initiativeRoll(0, 20) + (hero.stats.speed ? hero.stats.speed : 0);
+            hero.initiative = roll;
+            result.push(hero);
+            // const roll = initiativeRoll(0, result.length);
+            // result.splice(roll, 0, hero)
+            // console.log(`${hero.characterName} initiative ${roll}`);
+        });
+
+        // take the highest initiative roll and put them first
+        function compare(a: Character, b: Character) {
+            if (a.initiative < b.initiative) {
+                return 1;
+            }
+            if (a.initiative > b.initiative) {
+                return -1;
+            }
+            return 0;
+        }
+
+        result.sort(compare);
+
+        // example: initiative = [heroCharacters[0], enemyCharacters[0], heroCharacters[1], enemyCharacters[4], enemyCharacters[3]]
+        initiative = result
+        console.log(initiative);
+    };
+
     // ============== //
     // === RETURN === //
     // ============== //
@@ -437,7 +481,7 @@ export default function Tv() {
         <StyledTVWrapper>
             <StyledTV id="layer-0" />
             <StyledTV id="layer-1" />
-            <StyledTV id="layer-2" />
+            <StyledTV id="layer-2" onClick={(event: any) => canvasOnClickHandler(event)} />
         </StyledTVWrapper>
     );
 };

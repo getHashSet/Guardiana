@@ -35,6 +35,7 @@ const RuneKnight: I.Character = {
         defense: 5,
         magicResistance: 1,
         move: 9,
+        speed: 7
     },
     items: {
         slot_top:    I.ITEM.LANCE,

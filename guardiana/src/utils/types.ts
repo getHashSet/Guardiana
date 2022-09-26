@@ -1,16 +1,22 @@
-// ============= //
-// === ENUMS === //
-// ============= //
+// ============================= //
+// === ENUMS & GLOBAL VALUES === //
+// ============================= //
+
+import { Stats } from "fs";
+
+// Scale pixel images by this number.
+export const SCALE: number = 3
+
+export enum PIXEL {
+    BLOCK = 24 // the size of each block in the game as pixels
+}
+
 export enum ACTIONS {
     SET_MAP = 'SET_MAP',
     SET_HERO_ROSTER = 'SET_HERO_ROSTER',
     SET_ENEMY_ROSTER = 'SET_ENEMY_ROSTER',
     SET_TARGET = 'SET_TARGET',
     TEST = 'TEST'
-}
-
-export enum PIXEL {
-    BLOCK = 24 // the size of each block in the game as pixels
 }
 
 export enum DIRECTION {
@@ -26,6 +32,42 @@ export enum ALIGNMENT {
     EVIL = 'EVIL'
 }
 
+export enum TARGET {
+    SINGLE,
+    AOE_3_WIDE,
+    AOE_5_WIDE,
+    AOE_7_WIDE,
+    LINE_2_LONG,
+    LINE_3_LONG,
+    LINE_4_LONG,
+    LINE_5_LONG
+}
+
+export interface SPELL {
+    name: string;   // spell name
+    cost: number;   // MP cost
+    level: number;  // number of levels into this spell
+    damage: number; // damage roll
+    target: TARGET; // shape of the attack
+    range: number;  // how many squares away you can target
+    icon: string;   // the icon displayed on the square
+}
+
+export enum MAGIC {
+    NONE = 'NONE',
+
+    BLAZE = 'BLAZE',
+    BLAZE2 = 'BLAZE2',
+    BLAZE3 = 'BLAZE3',
+    BLAZE4 = 'BLAZE4',
+
+    MUDDLE = 'MUDDLE',
+
+    SLEEP = 'SLEEP',
+
+    DESOL = 'DESOL',
+}
+
 export enum ITEM {
     NONE = 'NONE',
 
@@ -34,6 +76,7 @@ export enum ITEM {
     LANCE = 'LANCE',
     SPEAR = 'SPEAR',
     AXE = 'AXE',
+    STAFF = 'STAFF',
 
     // === ITEMS === //
     HERB = 'HERB',
@@ -54,8 +97,13 @@ export enum BATTLE {
     CLIFFSIDE_RUINS = 'Cliff Side Ruins',
 }
 
-// Scale pixel images by this number.
-export const SCALE: number = 2
+export interface STATS {
+    attack: number;
+    defense: number;
+    magicResistance: number;
+    move: number;
+    speed?: number;
+}
 
 // ================== //
 // === INTERFACES === //
@@ -78,12 +126,7 @@ export interface Character {
         usesMagic: boolean;
         magicPoints: number;
         magicPointsUsed: number;
-        magicSpells: [
-            Spell,
-            Spell,
-            Spell,
-            Spell
-        ] | null[]
+        magicSpells: MAGIC[] | null[]
     };
     stamina: {
         usesStamina: boolean;
@@ -91,12 +134,7 @@ export interface Character {
         staminaPointsUsed: number;
         ability: any; // TODO not sure how I want to address special abilities yet. (ie steal, secondary weapon, charge attack);
     }
-    stats: {
-        attack: number;
-        defense: number;
-        magicResistance: number;
-        move: number;
-    }
+    stats: STATS
     items: {
         slot_top: ITEM;
         slot_right: ITEM;
@@ -108,10 +146,6 @@ export interface Character {
     }
 }
 
-export interface Spell {
-    name: string;               // Blank is a spell type that has all empty values
-}
-
 export interface Item {
     name: string;
     globalAbility: boolean; // some items provide added stats or abilities.
@@ -121,6 +155,8 @@ export interface Item {
 
 export interface Map {
     name: string;
+
+    isABattleMap: boolean;
 
     /* === Layer 0 for the map. This will be behind everything.
     NOTE this is the only layer that can be a jpg. === */

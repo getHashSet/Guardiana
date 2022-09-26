@@ -2,6 +2,7 @@ import * as I from '../../utils/types';
 import { Targetable } from './Targetable';
 
 export class Character extends Targetable {
+    public characterID: string;
     public positionOnTV: { x: number, y: number };
     private size: any;
     public sprite: any;
@@ -12,16 +13,24 @@ export class Character extends Targetable {
     public characterName: string;
     public alignment: I.ALIGNMENT;
     public stepsTaken: number;
+    public stats: I.STATS;
+    public initiative: number;
 
     //constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true, alignment: I.ALIGNMENT = I.ALIGNMENT.NEUTRAL) {
-    constructor(character: I.Character, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }) {
+    constructor(character: I.Character, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, index: number) {
         super()
 
         this.alignment = character.alignment ?? I.ALIGNMENT.NEUTRAL
 
         spawnLocation = spawnLocation ?? {x: 0, y: 0}
 
+        this.stats = character.stats
+
+        this. initiative = 0
+
         this.characterName = character.characterName
+
+        this.characterID = `${character.characterName}${index}${character.alignment}`
 
         this.animate = {
             isAnimated: character.isAnimated ?? true,

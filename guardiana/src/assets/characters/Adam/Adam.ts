@@ -37,6 +37,7 @@ const Adam: I.Character = {
         defense: 3,
         magicResistance: 3,
         move: 7,
+        speed: 5
     },
     items: {
         slot_top: I.ITEM.NONE,

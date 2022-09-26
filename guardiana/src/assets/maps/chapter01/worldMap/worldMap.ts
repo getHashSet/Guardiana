@@ -19,8 +19,13 @@ const getMap = (eventID: number) => {
 
 const worldMap: I.Map = {
     name: "World Map",
+
+    isABattleMap: false,
+    
     imageBottom,
+    
     imageTop: null,
+    
     mapDimentions: { x: 34, y: 32 },
 
     grid: [

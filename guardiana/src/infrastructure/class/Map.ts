@@ -14,6 +14,7 @@ export class Map {
     private hasTopImage: boolean;
     public events: any; // TODO Type this beast
     public name: string;
+    public isABattleMap: boolean;
 
     constructor(map: I.Map) {
         this.name = map.name;
@@ -52,6 +53,8 @@ export class Map {
             width: map.mapDimentions.x * I.PIXEL.BLOCK,
             height: map.mapDimentions.y * I.PIXEL.BLOCK
         }
+
+        this.isABattleMap = map.isABattleMap;
 
         // === EVENTS === //
         this.events = map.events;

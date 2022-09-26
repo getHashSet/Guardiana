@@ -24,6 +24,7 @@ const getMap = (eventID: number) => {
 
 const battle01: I.Map = {
     name: I.BATTLE.CLIFFSIDE_RUINS,
+    isABattleMap: true,
     imageBottom,
     imageTop,
     mapDimentions: {
