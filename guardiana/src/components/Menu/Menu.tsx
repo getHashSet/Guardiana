@@ -109,4 +109,5 @@ const StyledMenuFrame = styled('div')`
     align-items:  center;
     overflow: hidden;
     transform: translateX(-50%);
+    z-index: 9;
 `;

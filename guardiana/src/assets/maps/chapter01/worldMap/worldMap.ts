@@ -76,7 +76,6 @@ const worldMap: I.Map = {
     npcStartLocations: [null],
 
     enemyStartLocations: [
-        { name: 'Hero 01', x: 1, y: 1 }
     ],
 
     events: {

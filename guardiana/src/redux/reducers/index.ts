@@ -3,11 +3,13 @@ import test_reducer from './test.reducer';
 import map_reducer from './map.reducer';
 //import target_reducer from './target.reducer';
 import hero_roster_reducer from './heroRoster.reducer';
+import enemy_roster_reducer from './enemyRoster.reducer';
 
 const allReducers = combineReducers({
     test: test_reducer,
     map: map_reducer,
-    heroRoster: hero_roster_reducer
+    heroRoster: hero_roster_reducer,
+    enemyRoster: enemy_roster_reducer,
 });
 
 export default allReducers;

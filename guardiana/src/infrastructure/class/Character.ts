@@ -10,9 +10,12 @@ export class Character extends Targetable {
     private animate: { isAnimated: boolean, animationFlag: boolean };
     public currentLocationOnGrid: { x: number, y: number };
     public characterName: string;
+    public alignment: I.ALIGNMENT;
 
-    constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true) {
+    constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true, alignment: I.ALIGNMENT = I.ALIGNMENT.NEUTRAL) {
         super()
+
+        this.alignment = alignment
 
         spawnLocation = spawnLocation ?? {x: 0, y: 0}
 
@@ -131,6 +134,9 @@ export class Character extends Targetable {
             y: I.PIXEL.BLOCK * I.SCALE
         }
 
+        if (this.characterName === "Rune Knight") {
+            //console.log(spriteFinalSizeInPixels)
+        }
         let ctx: any = document.getElementById('layer-1');
         ctx = ctx.getContext('2d');
         ctx.imageSmoothingEnabled = false;

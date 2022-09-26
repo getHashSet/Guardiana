@@ -19,6 +19,7 @@ const Adam: I.Character = {
     hitPoints: 25,
     damageTaken: 0,
     isPromoted: false,
+    alignment: I.ALIGNMENT.GOOD,
     magic: {
         usesMagic: false,
         magicPoints: 0,
@@ -44,8 +45,7 @@ const Adam: I.Character = {
         slot_bottom: I.ITEM.NONE,
     },
     equip: {
-        isEquip: false,
-        slot: -1,
+        slot: [],
     },
 }
 

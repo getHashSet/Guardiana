@@ -21,6 +21,7 @@ export const Max: I.Character = {
     hitPoints: 25,
     damageTaken: 0,
     isPromoted: false,
+    alignment: I.ALIGNMENT.GOOD,
     magic: {
         usesMagic: false,
         magicPoints: 0,
@@ -46,8 +47,7 @@ export const Max: I.Character = {
         slot_bottom: I.ITEM.NONE,
     },
     equip: {
-        isEquip: false,
-        slot: -1,
+        slot: [I.ITEM_SLOT.TOP],
     },
 }
 

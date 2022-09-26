@@ -23,7 +23,7 @@ const getMap = (eventID: number) => {
 };
 
 const battle01: I.Map = {
-    name: "Ol' Cliffside Ruins",
+    name: I.BATTLE.CLIFFSIDE_RUINS,
     imageBottom,
     imageTop,
     mapDimentions: {
@@ -72,8 +72,16 @@ const battle01: I.Map = {
     ],
 
     npcStartLocations: [null],
+
     enemyStartLocations: [
-        { name: 'Hero 01', x: 1, y: 1 }
+        { name: 'Enemy 01', x: 8, y: 2 },
+        { name: 'Enemy 02', x: 7, y: 3},
+        { name: 'Enemy 03', x: 8, y: 3},
+        { name: 'Enemy 02', x: 7, y: 4},
+        { name: 'Enemy 02', x: 8, y: 4},
+        { name: 'Enemy 02', x: 10, y: 8},
+        { name: 'Enemy 02', x: 8, y: 9},
+        { name: 'Enemy 02', x: 9, y: 9},
     ],
 
     events: {

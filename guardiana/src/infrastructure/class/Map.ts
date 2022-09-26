@@ -9,7 +9,7 @@ export class Map {
     public cameraLocation: { x: number, y: number };
     public grid: number[][];
     public heroStartLocations: { name: string, x: number, y: number }[];
-    public enemyStartLocations: { name: string, x: number, y: number }[] | null[];
+    public enemyStartLocations: { name: string, x: number, y: number }[];
     public npcStartLocations: { name: string, x: number, y: number }[] | null[];
     private hasTopImage: boolean;
     public events: any; // TODO Type this beast
@@ -61,16 +61,20 @@ export class Map {
     move(direction: I.DIRECTION) {
         switch (direction) {
             case I.DIRECTION.DOWN:
-                this.cameraPosition.y -= (I.PIXEL.BLOCK * I.SCALE);
+                this.cameraPosition.y -= (I.PIXEL.BLOCK * I.SCALE)
+                this.cameraLocation.y++
                 break;
             case I.DIRECTION.UP:
-                this.cameraPosition.y += (I.PIXEL.BLOCK * I.SCALE);
+                this.cameraPosition.y += (I.PIXEL.BLOCK * I.SCALE)
+                this.cameraLocation.y--
                 break;
             case I.DIRECTION.LEFT:
-                this.cameraPosition.x -= (I.PIXEL.BLOCK * I.SCALE);
+                this.cameraPosition.x -= (I.PIXEL.BLOCK * I.SCALE)
+                this.cameraLocation.x++
                 break;
             case I.DIRECTION.RIGHT:
-                this.cameraPosition.x += (I.PIXEL.BLOCK * I.SCALE);
+                this.cameraPosition.x += (I.PIXEL.BLOCK * I.SCALE)
+                this.cameraLocation.x--
                 break;
             default:
                 break;
@@ -130,12 +134,4 @@ export class Map {
             this.pixels.height * I.SCALE
         );
     }
-
-    cameraToTarget(targetLocation: { x: number, y: number }) {
-        // This should release the target and witch to grid target.
-        // Then grid target will move back to the x,y location of target.
-        // Once there the target gains focus
-        console.log('MOVE TO TARGET WORKED... SORTA')
-    }
-
 }

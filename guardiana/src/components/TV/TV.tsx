@@ -11,12 +11,6 @@ import Adam from '../../assets/characters/Adam';
 // ================= //
 // === COMPONENT === //
 // ================= //
-/*
-    - Mount the 3 layers of the TV
-    - Game Loop at 30 FPS
-    - Game Events from 0 to 99
-    - 
-*/
 export default function Tv() {
     const dispatch = useDispatch();
     const fps = 30;
@@ -26,9 +20,17 @@ export default function Tv() {
     const [heroRoster, setHeroRoster]: [I.Character[], Function] = useState(useSelector((state: { heroRoster: I.Character[] }) => state.heroRoster)); // TODO this is refreshing the whole component and not just the roster
     let heroCharacters: Character[] = [new Character(Max.characterName, Background.heroStartLocations[0], Background.cameraLocation, Max.spriteSheet[0], true)];
     let Player: Character = heroCharacters[0]; // TODO this should be a target and not always who is in slot 0
-    
-    heroCharacters = heroRoster.map((hero: I.Character, index: number) => {
-        const newCharacter = new Character(hero.characterName, Background.heroStartLocations[index], Background.cameraLocation, hero.spriteSheet[0], true);
+    const [enemyRoster, setEnemyRoster]: [I.Character[], Function] = useState(useSelector((state: { enemyRoster: I.Character[] }) => state.enemyRoster));
+    let enemyCharacters: Character[] = [];
+    let currentFocused: number = 0;
+
+    enemyCharacters = Background.enemyStartLocations.map((startLocation: { name: string, x: number, y: number }, index: number) => {
+        const newEnemy = new Character(enemyRoster[index].characterName, startLocation, Background.cameraLocation, enemyRoster[index].spriteSheet[0], true);
+        return newEnemy;
+    });
+
+    heroCharacters = Background.heroStartLocations.filter((_, index: number) => heroRoster[index] !== undefined).map((startLocation: { name: string, x: number, y: number }, index: number) => {
+        const newCharacter = new Character(heroRoster[index].characterName, startLocation, Background.cameraLocation, heroRoster[index].spriteSheet[0], true);
         return newCharacter;
     });
 
@@ -48,11 +50,11 @@ export default function Tv() {
     const mapEvents = (eventID: number) => {
         switch (eventID) {
             case 99: // DEV ONLY 
-            {
-                const newRoster: I.Character[] = [Adam, Max];
-                setNewHeroRoster(newRoster);
-            }
-            break;
+                {
+                    const newRoster: I.Character[] = [Adam, Max];
+                    setNewHeroRoster(newRoster);
+                }
+                break;
             case 41: // update map exit 1
                 {
                     const nextMap = Background.events.getMap(eventID);
@@ -84,7 +86,7 @@ export default function Tv() {
 
         if (!mounted) { return };
 
-        Player = heroCharacters[0];
+        Player = heroCharacters[currentFocused] ?? heroCharacters[0];
 
         const layer1_el: any = document.getElementById('layer-1');
         const layer2_el: any = document.getElementById('layer-2');
@@ -99,6 +101,11 @@ export default function Tv() {
             layer2.clearRect(0, 0, layer2_el.width, layer2_el.height);
 
             Background.draw();
+
+            enemyCharacters.forEach((enemy: Character, index: number) => {
+                enemy.update();
+            })
+
             heroCharacters.forEach((hero: Character, index: number) => {
                 if (index !== 0) {
                     hero.update();
@@ -122,6 +129,30 @@ export default function Tv() {
     const movement = ({ keyCode }: any) => {
 
         switch (keyCode) {
+            case 49: //1
+                {
+                    currentFocused = 0
+                    Player = heroCharacters[currentFocused] ?? heroCharacters[0];
+                    // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
+                    cameraToTarget( Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                }
+                break;
+            case 50: //2
+                {
+                    currentFocused = 1
+                    Player = heroCharacters[1] ?? heroCharacters[0];
+                    // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
+                    cameraToTarget( Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                }
+                break;
+            case 51: // 3
+                {
+                    currentFocused = 2
+                    Player = heroCharacters[2] ?? heroCharacters[0];
+                    // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
+                    cameraToTarget( Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 4);
+                }
+                break;
             case 87: //W //UP
                 {
                     Player.face(I.DIRECTION.UP);
@@ -137,6 +168,12 @@ export default function Tv() {
                     if (Player.positionOnTV.y <= 2 * (I.PIXEL.BLOCK * I.SCALE)) {
                         Background.move(I.DIRECTION.UP);
                         heroCharacters.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.y--;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.DOWN);
+                        });
+
+                        enemyCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.y--;
                             if (objectOnLayer.characterName === Player.characterName) { return };
                             objectOnLayer.move(I.DIRECTION.DOWN);
@@ -176,6 +213,11 @@ export default function Tv() {
                             if (objectOnLayer.characterName === Player.characterName) { return };
                             objectOnLayer.move(I.DIRECTION.UP);
                         });
+                        enemyCharacters.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.y++;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.UP);
+                        });
                         Player.update();
                     }
                     else {
@@ -206,6 +248,12 @@ export default function Tv() {
                     if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 2 * I.SCALE) {
                         Background.move(I.DIRECTION.RIGHT);
                         heroCharacters.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.x--;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.RIGHT);
+                            console.log(`${objectOnLayer.characterName}: Current Block: [${objectOnLayer.currentLocationOnGrid.x},${objectOnLayer.currentLocationOnGrid.y}]`)
+                        });
+                        enemyCharacters.forEach((objectOnLayer: Character) => {
                             objectOnLayer.currentLocationOnGrid.x--;
                             if (objectOnLayer.characterName === Player.characterName) { return };
                             objectOnLayer.move(I.DIRECTION.RIGHT);
@@ -245,6 +293,11 @@ export default function Tv() {
                             if (objectOnLayer.characterName === Player.characterName) { return };
                             objectOnLayer.move(I.DIRECTION.LEFT);
                         });
+                        enemyCharacters.forEach((objectOnLayer: Character) => {
+                            objectOnLayer.currentLocationOnGrid.x++;
+                            if (objectOnLayer.characterName === Player.characterName) { return };
+                            objectOnLayer.move(I.DIRECTION.LEFT);
+                        });
                         Player.update();
                     } else {
                         Player.move(I.DIRECTION.RIGHT);
@@ -260,11 +313,6 @@ export default function Tv() {
                     console.table(`Current Block: [${Player.currentLocationOnGrid.x},${[Player.currentLocationOnGrid.y]}]`);
                     break;
                 }
-            case 67:
-                {
-                    Background.cameraToTarget({ x: Player.currentLocationOnGrid.x, y: Player.currentLocationOnGrid.y })
-                }
-                break;
             default:
                 break;
         }
@@ -305,6 +353,80 @@ export default function Tv() {
 
     }, [Update]);
 
+    // ================= //
+    // === FUNCTIONS === //
+    // ================= //
+    const cameraToTarget = (x: number, y: number) => {
+        console.log(`path from ${Background.cameraLocation.x},${Background.cameraLocation.y} to ${x},${y}`);
+        const xStart = Background.cameraLocation.x
+        const yStart = Background.cameraLocation.y
+        const xEnd = x
+        const yEnd = y
+
+        if (xStart === xEnd && yStart === yEnd) {return};
+
+        setTimeout(() => {
+            const yDirection = yStart > yEnd ? I.DIRECTION.UP : I.DIRECTION.DOWN;
+            const xDirection = xStart > xEnd ? I.DIRECTION.RIGHT : I.DIRECTION.LEFT;
+            const yOtherObjects = yStart > yEnd ? I.DIRECTION.DOWN : I.DIRECTION.UP;
+            const xOtherObjects = xStart > xEnd ? I.DIRECTION.RIGHT : I.DIRECTION.LEFT;
+
+            if (yStart !== yEnd) {
+                Background.move(yDirection);
+                
+                heroCharacters.forEach((objectOnLayer: Character) => {
+                    if (yDirection === I.DIRECTION.DOWN) {
+                        objectOnLayer.currentLocationOnGrid.y++;
+                    } else {
+                        objectOnLayer.currentLocationOnGrid.y--;
+                    };
+
+                    objectOnLayer.move(yOtherObjects);
+                });
+
+                enemyCharacters.forEach((objectOnLayer: Character) => {
+                    if (yDirection === I.DIRECTION.DOWN) {
+                        objectOnLayer.currentLocationOnGrid.y++;
+                    } else {
+                        objectOnLayer.currentLocationOnGrid.y--;
+                    };
+                    
+                    objectOnLayer.move(yOtherObjects);
+                });
+            }
+
+            if (xStart !== xEnd) {
+                Background.move(xDirection);
+
+                heroCharacters.forEach((objectOnLayer: Character) => {
+                    if (xDirection === I.DIRECTION.RIGHT) {
+                        objectOnLayer.currentLocationOnGrid.x--;
+                    } else {
+                        objectOnLayer.currentLocationOnGrid.x++;
+                    };
+
+                    objectOnLayer.move(xOtherObjects);
+                });
+
+                enemyCharacters.forEach((objectOnLayer: Character) => {
+                    if (xDirection === I.DIRECTION.RIGHT) {
+                        objectOnLayer.currentLocationOnGrid.x--;
+                    } else {
+                        objectOnLayer.currentLocationOnGrid.x++;
+                    };
+                    
+                    objectOnLayer.move(xOtherObjects);
+                });
+            }
+
+            // LOOP IT! TODO: This can probably go infinit... so figure out a good catch for this biz
+            cameraToTarget(x, y);
+        }, 50);
+    };
+
+    // ============== //
+    // === RETURN === //
+    // ============== //
     return (
         <StyledTVWrapper>
             <StyledTV id="layer-0" />

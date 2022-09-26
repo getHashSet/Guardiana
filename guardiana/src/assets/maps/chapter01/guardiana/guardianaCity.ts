@@ -91,7 +91,7 @@ export const guardianaCity: I.Map = {
 
     npcStartLocations: [null],
 
-    enemyStartLocations: [null],
+    enemyStartLocations: [],
 
     events: {
         getMap

@@ -13,24 +13,44 @@ export enum PIXEL {
 }
 
 export enum DIRECTION {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN
+    LEFT = 'LEFT',
+    RIGHT = 'RIGHT',
+    UP = 'UP',
+    DOWN = 'DOWN'
+}
+
+export enum ALIGNMENT {
+    GOOD = 'GOOD',
+    NEUTRAL = 'NEUTRAL',
+    EVIL = 'EVIL'
 }
 
 export enum ITEM {
-    NONE,
+    NONE = 'NONE',
 
     // === WEAPONS === //
-    SHORT_SWORD,
+    SHORT_SWORD = 'SHORT_SWORD',
+    LANCE = 'LANCE',
+    SPEAR = 'SPEAR',
+    AXE = 'AXE',
 
     // === ITEMS === //
-    HERB,
-    HEALING_SEED,
+    HERB = 'HERB',
+    HEALING_SEED = 'HEALING_SEED',
 
     // === MISC === //
-    BIKINI
+    BIKINI = 'BIKINI'
+}
+
+export enum ITEM_SLOT {
+    TOP = 'TOP',
+    LEFT = 'LEFT',
+    RIGHT = 'RIGHT',
+    BOTTOM = 'BOTTOM'
+}
+
+export enum BATTLE {
+    CLIFFSIDE_RUINS = 'Cliff Side Ruins',
 }
 
 // Scale pixel images by this number.
@@ -51,6 +71,7 @@ export interface Character {
     hitPoints: number;
     damageTaken: number;
     isPromoted: boolean | null;
+    alignment: ALIGNMENT;
     magic: {
         usesMagic: boolean;
         magicPoints: number;
@@ -81,8 +102,7 @@ export interface Character {
         slot_bottom: ITEM;
     }
     equip: {
-        isEquip: boolean;
-        slot: number;
+        slot: ITEM_SLOT[] | null[];
     }
 }
 
@@ -147,7 +167,7 @@ export interface Map {
     npcStartLocations: { name: string, x: number, y: number }[] | null[];
 
     // === The location of Enemy assets === //
-    enemyStartLocations: { name: string, x: number, y: number }[] | null[];
+    enemyStartLocations: { name: string, x: number, y: number }[];
 
     events: any;
 }
