@@ -3,6 +3,13 @@ import GuardianaCityBottom from './GuardianaBottom.png';
 import GrandianaCityTop from './GuardianaTop.png';
 import worldMap from '../worldMap';
 
+// =================== //
+// === NPC IMPORTS === //
+// =================== //
+import Priest from '../../../npc/priest';
+import Dad from '../../../npc/dad';
+import Man from '../../../npc/man';
+
 const getMap = (eventID: number) => {
     switch (eventID) {
         case 41:
@@ -24,7 +31,7 @@ const getMap = (eventID: number) => {
 
 export const guardianaCity: I.Map = {
     name: "Guardiana",
-    
+
     isABattleMap: false,
 
     imageBottom: GuardianaCityBottom,
@@ -75,9 +82,9 @@ export const guardianaCity: I.Map = {
         [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 9, 9, 9, 9, 9, 9, 0, 0, 0, 9, 9, 0, 0, 0, 9, 9, 6, 9, 9, 9, 0],
         [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 9, 9, 9, 9, 9, 9, 6, 6, 9, 9, 9, 9, 9, 9, 9, 6, 6, 9, 9, 9, 0],
         [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 9, 9, 9, 6, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 6, 6, 6, 9, 9, 9, 0],
-        [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 41,41, 41, 41, 41, 6,41,41,41,41,41,41, 41, 6, 6, 6, 6, 9, 9, 9, 0],
+        [0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 7, 41, 41, 41, 41, 41, 6, 41, 41, 41, 41, 41, 41, 41, 6, 6, 6, 6, 9, 9, 9, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      ],
+    ],
 
     pixelOffset: { x: 0, y: 16 },
 
@@ -91,7 +98,11 @@ export const guardianaCity: I.Map = {
         },
     ],
 
-    npcStartLocations: [null],
+    npcStartLocations: [
+        { name: 'Priest', info: Priest, x: 14, y: 7 },
+        { name: 'Weapon Shop', info: Dad, x: 32, y: 21 },
+        { name: 'Item Shop', info: Man, x: 33, y: 21 },
+    ],
 
     enemyStartLocations: [],
 

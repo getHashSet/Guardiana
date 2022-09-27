@@ -1,8 +1,8 @@
 import * as I from '../../utils/types';
-import { Targetable } from './Targetable';
 
-export class Character extends Targetable {
+export class Character {
     public characterID: string;
+    public characterName: string;
     public positionOnTV: { x: number, y: number };
     private size: any;
     public sprite: any;
@@ -10,15 +10,15 @@ export class Character extends Targetable {
     private lastUpdate: any;
     private animate: { isAnimated: boolean, animationFlag: boolean };
     public currentLocationOnGrid: { x: number, y: number };
-    public characterName: string;
+
+    // === Hero specific 
     public alignment: I.ALIGNMENT;
     public stepsTaken: number;
     public stats: I.STATS;
     public initiative: number;
+    public facing: I.DIRECTION;
 
-    //constructor(characterName: string, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, spriteSheet: any, animate: boolean = true, alignment: I.ALIGNMENT = I.ALIGNMENT.NEUTRAL) {
     constructor(character: I.Character, spawnLocation: { x: number, y: number }, cameraPosition: { x: number, y: number }, index: number) {
-        super()
 
         this.alignment = character.alignment ?? I.ALIGNMENT.NEUTRAL
 
@@ -29,6 +29,8 @@ export class Character extends Targetable {
         this. initiative = 0
 
         this.characterName = character.characterName
+
+        this.facing = I.DIRECTION.DOWN;
 
         this.characterID = `${character.characterName}${index}${character.alignment}`
 
@@ -72,20 +74,25 @@ export class Character extends Targetable {
                 case I.DIRECTION.DOWN:
                     this.spriteGrid.x = 0;
                     this.animate.animationFlag = false;
+                    this.facing = I.DIRECTION.DOWN;
                     break;
                 case I.DIRECTION.UP:
                     this.spriteGrid.x = I.PIXEL.BLOCK * 4;
                     this.animate.animationFlag = false;
+                    this.facing = I.DIRECTION.UP;
                     break;
                 case I.DIRECTION.LEFT:
                     this.spriteGrid.x = I.PIXEL.BLOCK * 2;
                     this.animate.animationFlag = false;
+                    this.facing = I.DIRECTION.LEFT;
                     break;
                 case I.DIRECTION.RIGHT:
                     this.spriteGrid.x = I.PIXEL.BLOCK * 6;
                     this.animate.animationFlag = false;
+                    this.facing = I.DIRECTION.RIGHT;
                     break;
                 default:
+                    console.log('Something broke in the face() function. No clue how.')
                     break;
             }
         } finally {

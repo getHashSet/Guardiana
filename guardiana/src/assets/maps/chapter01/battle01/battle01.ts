@@ -71,8 +71,8 @@ const battle01: I.Map = {
         { name: 'Hero 02', x: 8, y: 19 },
         { name: 'Hero 03', x: 7, y: 18 }
     ],
-
-    npcStartLocations: [null],
+    
+    npcStartLocations: [],
 
     enemyStartLocations: [
         { name: 'Enemy 01', x: 8, y: 2 },

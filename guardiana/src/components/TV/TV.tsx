@@ -24,6 +24,7 @@ export default function Tv() {
     let enemyCharacters: Character[] = [];
     let currentFocused: number = 0;
     let initiative: Character[] = [] //TODO use Initiative to identify whos next in combat.
+    let npcCharacters: Character[] = [];
 
     enemyCharacters = Background.enemyStartLocations.map((startLocation: { name: string, x: number, y: number }, index: number) => {
         const newEnemy = new Character(enemyRoster[index], startLocation, Background.cameraLocation, index);
@@ -32,7 +33,15 @@ export default function Tv() {
 
     heroCharacters = Background.heroStartLocations.filter((_, index: number) => heroRoster[index] !== undefined).map((startLocation: { name: string, x: number, y: number }, index: number) => {
         const newCharacter = new Character(heroRoster[index], startLocation, Background.cameraLocation, index);
+        console.log(`Spawn In: ${newCharacter.characterName}`);
+
         return newCharacter;
+    });
+
+    npcCharacters = Background.npcStartLocations.map((startLocationInfo: { name: string, info: I.Character, x: number, y: number }, index: number) => {
+        const newNpc = new Character(startLocationInfo.info, startLocationInfo, Background.cameraLocation, index);
+        console.log(`Spawn In: ${newNpc.characterName}`);
+        return newNpc;
     });
 
     const updateMap = (nextMap: I.Map) => {
@@ -108,12 +117,16 @@ export default function Tv() {
 
             Background.draw();
 
-            enemyCharacters.forEach((enemy: Character, index: number) => {
+            npcCharacters.forEach((npc: Character) => {
+                npc.update();
+            });
+
+            enemyCharacters.forEach((enemy: Character) => {
                 enemy.update();
                 // TODO enemy updates on wrong layer.
             })
 
-            heroCharacters.forEach((hero: Character, index: number) => {
+            heroCharacters.forEach((hero: Character) => {
                 hero.update(); // TODO heros updates on wrong layer.
             });
 
@@ -130,19 +143,97 @@ export default function Tv() {
         };
     };
 
+    const moveMap = (
+        backgroundDirection: I.DIRECTION
+    ) => {
+
+        // update the background
+        Background.move(backgroundDirection);
+
+        // placeholder variable for opposite direction
+        let objectDirection: I.DIRECTION;
+        let axis: string;
+        let incriment: string; // up or down
+
+        // identify what direction is the opposite and fill the placeholder
+        switch (backgroundDirection) {
+            case I.DIRECTION.UP:
+                objectDirection = I.DIRECTION.DOWN
+                axis = 'y';
+                incriment = 'down';
+                break;
+            case I.DIRECTION.DOWN:
+                objectDirection = I.DIRECTION.UP
+                axis = 'y';
+                incriment = 'up';
+                break;
+            case I.DIRECTION.LEFT:
+                objectDirection = I.DIRECTION.LEFT
+                axis = 'x';
+                incriment = 'up';
+                break;
+            case I.DIRECTION.RIGHT:
+                objectDirection = I.DIRECTION.RIGHT
+                axis = 'x';
+                incriment = 'down';
+                break;
+            default:
+                // log when stuff breaks
+                console.log('Something broke in the movment math. IDK how or why so you get this message.');
+                break;
+        }
+
+        // Move all spawned objects 
+        [...npcCharacters, ...enemyCharacters, ...heroCharacters].forEach((objectOnLayer: Character) => {
+
+            incriment === 'up' ? objectOnLayer.currentLocationOnGrid[axis === 'y' ? 'y' : 'x']++ : objectOnLayer.currentLocationOnGrid[axis === 'y' ? 'y' : 'x']--;
+
+            if (objectOnLayer.characterID === Player.characterID) { return };
+
+            objectOnLayer.move(objectDirection);
+        });
+
+        // update the player last so they are always on top
+        Player.update();
+    };
+
     // ================ //
     // === MOVEMENT === //
     // ================ //
     const movement = ({ keyCode }: any) => {
+        //console.log(keyCode);
 
         switch (keyCode) {
+            case 13: // enter
+                // This can be used to exicute actions
+                // EXAMPLE: you press enter then it checks the next space over for events.
+                {
+                    if (Player.facing === I.DIRECTION.UP) {
+                        console.log('facing up');
+                    };
+
+                    if (Player.facing === I.DIRECTION.LEFT) {
+                        console.log('facing left');
+                    };
+
+                    if (Player.facing === I.DIRECTION.DOWN) {
+                        console.log('facing down');
+                    };
+
+                    if (Player.facing === I.DIRECTION.RIGHT) {
+                        console.log('facing right');
+                    };
+
+                }
+                break;
             case 49: //1
                 {
                     currentFocused = initiative[currentFocused + 1] !== undefined ? currentFocused + 1 : 0;
+                    Player.face(I.DIRECTION.DOWN);
                     Player = initiative[currentFocused] ?? heroCharacters[0];
                     console.log(`current focus set to ${initiative[currentFocused].characterName}`);
                     // TODO: Find out how to center a character based on the I.SCALE. These magic numbers dont work well.
-                    cameraToTarget(Player.currentLocationOnGrid.x - 4, Player.currentLocationOnGrid.y - 3);
+                    cameraToTarget(Player.currentLocationOnGrid.x - 6, Player.currentLocationOnGrid.y - 5);
                 }
                 break;
             case 87: //W //UP
@@ -157,20 +248,8 @@ export default function Tv() {
                     };
 
                     // check if camera update is needed
-                    if (Player.positionOnTV.y <= 2 * (I.PIXEL.BLOCK * I.SCALE)) {
-                        Background.move(I.DIRECTION.UP);
-                        heroCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.y--;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.DOWN);
-                        });
-
-                        enemyCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.y--;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.DOWN);
-                        });
-                        Player.update();
+                    if (Player.positionOnTV.y <= 3 * (I.PIXEL.BLOCK * I.SCALE)) {
+                        moveMap(I.DIRECTION.UP);
                     } else {
                         Player.move(I.DIRECTION.UP);
                     };
@@ -198,19 +277,8 @@ export default function Tv() {
                     const tv: any = document.getElementById('layer-1');
 
                     // camera update
-                    if (Player.positionOnTV.y >= tv.height - (I.PIXEL.BLOCK * I.SCALE * 3)) {
-                        Background.move(I.DIRECTION.DOWN);
-                        heroCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.y++;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.UP);
-                        });
-                        enemyCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.y++;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.UP);
-                        });
-                        Player.update();
+                    if (Player.positionOnTV.y >= tv.height - (I.PIXEL.BLOCK * I.SCALE * 4)) {
+                        moveMap(I.DIRECTION.DOWN);
                     }
                     else {
                         Player.move(I.DIRECTION.DOWN);
@@ -237,21 +305,8 @@ export default function Tv() {
                     };
 
                     // check if we need to move the camera
-                    if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 2 * I.SCALE) {
-                        Background.move(I.DIRECTION.RIGHT);
-                        heroCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.x--;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.RIGHT);
-                            console.log(`${objectOnLayer.characterName}: Current Block: [${objectOnLayer.currentLocationOnGrid.x},${objectOnLayer.currentLocationOnGrid.y}]`)
-                        });
-                        enemyCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.x--;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.RIGHT);
-                            console.log(`${objectOnLayer.characterName}: Current Block: [${objectOnLayer.currentLocationOnGrid.x},${objectOnLayer.currentLocationOnGrid.y}]`)
-                        });
-                        Player.update();
+                    if (Player.positionOnTV.x <= I.PIXEL.BLOCK * 3 * I.SCALE) {
+                        moveMap(I.DIRECTION.RIGHT);
                     } else {
                         Player.move(I.DIRECTION.LEFT);
                     }
@@ -278,19 +333,8 @@ export default function Tv() {
 
                     const tv: any = document.getElementById('layer-1');
 
-                    if (Player.positionOnTV.x >= tv.width - (I.PIXEL.BLOCK * I.SCALE * 3)) {
-                        Background.move(I.DIRECTION.LEFT);
-                        heroCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.x++;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.LEFT);
-                        });
-                        enemyCharacters.forEach((objectOnLayer: Character) => {
-                            objectOnLayer.currentLocationOnGrid.x++;
-                            if (objectOnLayer.characterID === Player.characterID) { return };
-                            objectOnLayer.move(I.DIRECTION.LEFT);
-                        });
-                        Player.update();
+                    if (Player.positionOnTV.x >= tv.width - (I.PIXEL.BLOCK * I.SCALE * 4)) {
+                        moveMap(I.DIRECTION.LEFT)
                     } else {
                         Player.move(I.DIRECTION.RIGHT);
                     }
@@ -338,7 +382,7 @@ export default function Tv() {
         Update();
 
         rollInitiative();
-        cameraToTarget(initiative[0].currentLocationOnGrid.x - 4, initiative[0].currentLocationOnGrid.y - 3);
+        cameraToTarget(initiative[0].currentLocationOnGrid.x - 6, initiative[0].currentLocationOnGrid.y - 5);
 
         return () => {
             mounted = false;
@@ -388,6 +432,16 @@ export default function Tv() {
 
                     objectOnLayer.move(yOtherObjects);
                 });
+
+                npcCharacters.forEach((objectOnLayer: Character) => {
+                    if (yDirection === I.DIRECTION.DOWN) {
+                        objectOnLayer.currentLocationOnGrid.y++;
+                    } else {
+                        objectOnLayer.currentLocationOnGrid.y--;
+                    };
+
+                    objectOnLayer.move(yOtherObjects);
+                });
             }
 
             if (xStart !== xEnd) {
@@ -404,6 +458,16 @@ export default function Tv() {
                 });
 
                 enemyCharacters.forEach((objectOnLayer: Character) => {
+                    if (xDirection === I.DIRECTION.RIGHT) {
+                        objectOnLayer.currentLocationOnGrid.x--;
+                    } else {
+                        objectOnLayer.currentLocationOnGrid.x++;
+                    };
+
+                    objectOnLayer.move(xOtherObjects);
+                });
+
+                npcCharacters.forEach((objectOnLayer: Character) => {
                     if (xDirection === I.DIRECTION.RIGHT) {
                         objectOnLayer.currentLocationOnGrid.x--;
                     } else {
@@ -471,7 +535,7 @@ export default function Tv() {
 
         // example: initiative = [heroCharacters[0], enemyCharacters[0], heroCharacters[1], enemyCharacters[4], enemyCharacters[3]]
         initiative = result
-        console.log(initiative);
+        //console.log(initiative);
     };
 
     // ============== //

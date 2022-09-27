@@ -2,10 +2,8 @@
 // === ENUMS & GLOBAL VALUES === //
 // ============================= //
 
-import { Stats } from "fs";
-
 // Scale pixel images by this number.
-export const SCALE: number = 3
+export const SCALE: number = 2
 
 export enum PIXEL {
     BLOCK = 24 // the size of each block in the game as pixels
@@ -202,7 +200,7 @@ export interface Map {
     heroStartLocations: { name: string, x: number, y: number }[];
 
     // === The location of NPC assets. === //
-    npcStartLocations: { name: string, x: number, y: number }[] | null[];
+    npcStartLocations: { name: string, info: Character, x: number, y: number }[];
 
     // === The location of Enemy assets === //
     enemyStartLocations: { name: string, x: number, y: number }[];

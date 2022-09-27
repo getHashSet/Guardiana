@@ -98,7 +98,7 @@ export const alteroneCity: I.Map = {
         },
     ],
 
-    npcStartLocations: [null],
+    npcStartLocations: [],
 
     enemyStartLocations: [],
 

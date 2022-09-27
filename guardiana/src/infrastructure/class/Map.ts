@@ -1,4 +1,5 @@
 import * as I from '../../utils/types';
+import { Character } from './Character';
 
 export class Map {
     private pixels: { width: number, height: number }; // total pixels width and height
@@ -10,7 +11,7 @@ export class Map {
     public grid: number[][];
     public heroStartLocations: { name: string, x: number, y: number }[];
     public enemyStartLocations: { name: string, x: number, y: number }[];
-    public npcStartLocations: { name: string, x: number, y: number }[] | null[];
+    public npcStartLocations: { name: string, info: I.Character, x: number, y: number }[];
     private hasTopImage: boolean;
     public events: any; // TODO Type this beast
     public name: string;
@@ -34,7 +35,7 @@ export class Map {
 
         this.heroStartLocations = map.heroStartLocations
         this.enemyStartLocations = map.enemyStartLocations
-        this.npcStartLocations = map.enemyStartLocations
+        this.npcStartLocations = map.npcStartLocations
 
         this.grid = map.grid
 
