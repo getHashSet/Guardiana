@@ -10,4 +10,6 @@ frontend component to the gameroom
 
 **yada yada
 
+**yada**
+
 **Step 9:** :tada:
